@@ -1,7 +1,7 @@
 "use client";
 
 import { FaRegBell, FaStar } from "react-icons/fa";
-import { SearchBar, DoctorCard } from "@/components/ui";
+import { SearchBar, DoctorCard, DoctorRowCard } from "@/components/ui";
 import HorizontalShowcase from "@/components/ui/HorizontalShowcase";
 import { Navbar } from "@/components/layout";
 
@@ -141,9 +141,21 @@ export default function Home() {
           </h3>
           <button className="text-zinc-500 cursor-pointer">See more</button>
         </div>
+
+        {/* Doctor Row Cards */}
+        {doctors.slice(0, 3).map((doctor, idx) => (
+          <div key={doctor.name + idx} className="mb-4">
+            <DoctorRowCard
+              name={doctor.name}
+              specialty={doctor.specialty}
+              rating={doctor.rating}
+              reviews={300}
+            />
+          </div>
+        ))}
       </div>
 
-      <div className="h-16 w-full" />
+      <div className="h-20 w-full" />
     </div>
   );
 }
