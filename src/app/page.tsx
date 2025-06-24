@@ -68,7 +68,7 @@ export default function Home() {
               className="h-16 me-4"
             />
             <h2 className="text-[#525858] font-semibold text-lg text-start">
-              Whenever, wherever
+              Whenever, Wherever
             </h2>
           </div>
           <div className="flex items-center ms-4 gap-4">

@@ -29,8 +29,8 @@ export function DoctorRowCard({
         </div>
         <div className="flex items-center gap-2">
           <FaStar className="text-amber-300 -translate-y-0.5" />
-          <p className="font-bold text-zinc-800">{rating.toFixed(1)}</p>
-          <p className="text-zinc-400">({reviews} reviews)</p>
+          <p className="font-medium text-zinc-800">{rating.toFixed(1)}</p>
+          <p className="text-zinc-400 text-sm">({reviews} reviews)</p>
         </div>
       </div>
     </div>
