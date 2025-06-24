@@ -2,6 +2,7 @@
 
 import { FaRegBell, FaStar } from "react-icons/fa";
 import { SearchBar, DoctorCard } from "@/components/ui";
+import HorizontalShowcase from "@/components/ui/HorizontalShowcase";
 
 export default function Home() {
   // Updated specialties array with colors for SVGs
@@ -38,6 +39,19 @@ export default function Home() {
     },
   ];
 
+  const doctors = [
+    { name: "Dr. Alice Smith", specialty: "Cardiologist", rating: 4.8 },
+    { name: "Dr. Bob Johnson", specialty: "Pulmonologist", rating: 4.5 },
+    { name: "Dr. Carol Lee", specialty: "General Practitioner", rating: 4.2 },
+    { name: "Dr. David Kim", specialty: "Nephrologist", rating: 4.7 },
+    { name: "Dr. Emma Garcia", specialty: "Pediatrician", rating: 4.9 },
+    { name: "Dr. Frank Wright", specialty: "Gastroenterologist", rating: 4.4 },
+    { name: "Dr. Grace Chen", specialty: "Dermatologist", rating: 4.3 },
+    { name: "Dr. Henry Patel", specialty: "Endocrinologist", rating: 4.6 },
+    { name: "Dr. Irene Lopez", specialty: "Neurologist", rating: 4.1 },
+    { name: "Dr. Jack Wilson", specialty: "Orthopedic Surgeon", rating: 4.0 },
+  ];
+
   return (
     <div className="homepage bg-zinc-100 p-4">
       {/* Header */}
@@ -57,12 +71,10 @@ export default function Home() {
           <FaRegBell className="text-[#525858] text-4xl" />
         </div>
       </div>
-
       {/* Searchbar */}
       <div className="p-4">
         <SearchBar />
       </div>
-
       {/* Specialty Section */}
       <div className="flex-col">
         <div className="flex justify-between">
@@ -109,14 +121,14 @@ export default function Home() {
         </h3>
 
         {/* Doctor Cards */}
-        <div className="flex gap-4 overflow-x-auto">
-          <DoctorCard
-            name="Dr. Name"
-            image="http://placehold.co/150"
-            rating={4.5}
-            specialty="Specialty"
-          />
-        </div>
+        <HorizontalShowcase items={doctors} />
+      </div>
+
+      {/* Top Doctors Section */}
+      <div className="flex-col mt-6">
+        <h3 className="text-xl font-semibold text-[#525858] my-4">
+          Top Doctors
+        </h3>
       </div>
     </div>
   );

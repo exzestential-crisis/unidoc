@@ -2,23 +2,23 @@ import { FaStar } from "react-icons/fa";
 
 interface DoctorCardProps {
   name: string;
-  image: string;
+  image?: string;
   rating: number;
   specialty: string;
 }
 
 export function DoctorCard({
   name,
-  image,
+  image = "http://placehold.co/100",
   rating,
   specialty,
 }: DoctorCardProps) {
   return (
-    <div className="p-4 flex-col shadow-md shadow-zinc-200 rounded-xl bg-white min-w-[180px]">
+    <div className="p-2 flex-col shadow-md shadow-zinc-200 rounded-lg bg-white min-w-[180px]">
       <img
         src={image}
         alt={name}
-        className="rounded-lg w-full h-32 object-cover"
+        className="rounded-sm w-full h-40 object-cover"
       />
       <div className="flex justify-between pt-3">
         <p className="text-lg text-zinc-800 font-medium">{name}</p>
