@@ -14,11 +14,11 @@ export function DoctorCard({
   specialty,
 }: DoctorCardProps) {
   return (
-    <div className="p-2 flex-col shadow-md shadow-zinc-200 rounded-lg bg-white min-w-[180px]">
+    <div className="p-2 flex-col shadow-md shadow-zinc-200 rounded-lg bg-white w-[150px]">
       <img
         src={image}
         alt={name}
-        className="rounded-sm w-full h-40 object-cover"
+        className="rounded-sm w-full h-32 object-cover"
       />
       <div className="flex justify-between pt-3">
         <p className="text-lg text-zinc-800 font-medium">{name}</p>
