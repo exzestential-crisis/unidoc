@@ -1,9 +1,24 @@
 "use client";
 
+import { useState } from "react";
 import { ArrowBack, ArrowForward } from "@/components/nav";
 import { Facebook, Google } from "../../../../public";
+import Input from "@/components/ui/Input";
 
 export default function LoginPage() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange =
+    (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: e.target.value,
+      }));
+    };
+
   return (
     <div className="min-h-[100dvh] bg-zinc-100 p-4">
       <ArrowBack size="extra-large" />
@@ -12,37 +27,25 @@ export default function LoginPage() {
         <h2 className="font-bold text-4xl text-zinc-800 mb-40">Login</h2>
 
         <div className="flex flex-col space-y-4 w-full">
-          <div className="relative w-full">
-            <input
-              type="email"
-              id="email"
-              placeholder=" "
-              className="peer w-full p-6 pt-8 text-xl text-black rounded-lg bg-white shadow shadow-zinc-200 placeholder-transparent focus:outline-none"
-            />
-            <label
-              htmlFor="email"
-              className="absolute left-6 top-6 text-xl text-zinc-400 transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-xl peer-focus:top-2 peer-focus:text-sm"
-            >
-              Email
-            </label>
-          </div>
-          <div className="relative w-full">
-            <input
-              type="password"
-              id="password"
-              placeholder=" "
-              className="peer w-full p-6 pt-8 text-xl text-black rounded-lg bg-white shadow shadow-zinc-200 placeholder-transparent focus:outline-none"
-            />
-            <label
-              htmlFor="password"
-              className="absolute left-6 top-6 text-xl text-zinc-400 transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-xl peer-focus:top-2 peer-focus:text-sm"
-            >
-              Password
-            </label>
-          </div>
+          <Input
+            type="email"
+            id="email"
+            label="Email"
+            value={formData.email}
+            onChange={handleInputChange("email")}
+          />
+
+          <Input
+            type="password"
+            id="password"
+            label="Password"
+            value={formData.password}
+            onChange={handleInputChange("password")}
+            showPasswordToggle={true}
+          />
         </div>
 
-        <div className="flex justify-end  items-center w-full ">
+        <div className="flex justify-end items-center w-full">
           <p className="text-sm text-zinc-400 my-4">Forgot your password? </p>
           <ArrowForward size="small" />
         </div>
