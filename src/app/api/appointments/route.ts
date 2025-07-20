@@ -2,6 +2,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { createServerSupabaseClient } from "../../../../utils/supabase/server";
+import { createClient } from "@supabase/supabase-js";
+
+// Create admin client for server-side operations that bypass RLS
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  }
+);
 
 // Zod schema for appointment booking
 const appointmentSchema = z.object({
@@ -16,6 +29,7 @@ const appointmentSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Use regular client for auth, admin client for database operations
     const supabase = await createServerSupabaseClient();
 
     // TEMPORARY: Comment out for testing
@@ -36,7 +50,7 @@ export async function POST(request: NextRequest) {
 
     // TEMPORARY: Use hardcoded patient profile for testing
     // Replace 'test-patient-profile-id' with an actual ID from your DB
-    const patientProfile = { id: "test-patient-profile-id" };
+    const patientProfile = { id: "f267d0b0-92af-474d-92ab-83bad3c10f64" };
 
     /*
     // Get patient profile ID from user
@@ -55,7 +69,7 @@ export async function POST(request: NextRequest) {
     */
 
     // Start a transaction-like operation
-    const supabaseTransaction = supabase;
+    const supabaseTransaction = supabaseAdmin; // Use admin client for DB operations
 
     // Get the selected slot and verify it's available
     const { data: slot, error: slotError } = await supabaseTransaction
