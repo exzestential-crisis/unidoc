@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createServerSupabaseClient } from "../../../../../utils/supabase/server";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 // GET /api/medical-specialties/[specialtyId]/services
 export async function GET(

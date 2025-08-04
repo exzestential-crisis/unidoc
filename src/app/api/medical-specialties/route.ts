@@ -1,7 +1,5 @@
-// app/api/medical-specialties/route.ts
 import { NextResponse } from "next/server";
-import { MedicalSpecialtiesResponseSchema } from "@/lib/schemas/medical-specialty";
-import { createServerSupabaseClient } from "../../../../utils/supabase/server";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 export async function GET() {
   const supabase = await createServerSupabaseClient();
@@ -18,16 +16,5 @@ export async function GET() {
     );
   }
 
-  // Validate using Zod
-  const validated = MedicalSpecialtiesResponseSchema.safeParse(data);
-
-  if (!validated.success) {
-    console.error("Zod validation error:", validated.error);
-    return NextResponse.json(
-      { error: "Invalid data format." },
-      { status: 500 }
-    );
-  }
-
-  return NextResponse.json(validated.data);
+  return NextResponse.json(data);
 }

@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "../../../utils/supabase/client"; // import your client factory
+import { supabaseBrowserClient } from "@/utils/supabase/client"; // import your client factory
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-  const supabase = createClient();
+  const supabase = supabaseBrowserClient;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

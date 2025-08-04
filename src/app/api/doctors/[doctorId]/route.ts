@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { createServerSupabaseClient } from "../../../../../utils/supabase/server";
-import { DoctorProfileSchema } from "@/lib/schemas/doctor-profile";
+import { createServerSupabaseClient } from "@/utils/supabase/server";
 
 // GET /api/doctor-profiles/[id]
 export async function GET(
@@ -36,10 +35,8 @@ export async function GET(
       );
     }
 
-    const validatedProfile = DoctorProfileSchema.parse(data);
-
     return NextResponse.json({
-      data: validatedProfile,
+      data,
       success: true,
     });
   } catch (error) {

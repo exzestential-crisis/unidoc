@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { updateSession } from "../utils/supabase/updateSession";
+import { updateSession } from "@/utils/supabase/updateSession";
 
 const unprotectedRoutes = [
   "/",
