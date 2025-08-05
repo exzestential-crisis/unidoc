@@ -41,16 +41,10 @@ export default function RegisterPage() {
       }
 
       if (authData.user) {
-        // Success message and redirect
-        if (authData.user.email_confirmed_at) {
-          // User is already confirmed, redirect to dashboard
-          router.push("/login");
-        } else {
-          // User needs to confirm email
-          router.push(
-            "/auth/confirm-email?message=Check your email to confirm your account"
-          );
-        }
+        // Instead of redirecting directly to login or confirm email, go to profile completion
+        router.push(
+          `/complete-profile?userId=${authData.user.id}&type=${userType}`
+        );
       }
     } catch (error) {
       console.error("Registration error:", error);
