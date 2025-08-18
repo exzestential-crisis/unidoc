@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server"; // new client
 import { z } from "zod";
 
 const schema = z.object({
@@ -9,7 +9,10 @@ const schema = z.object({
 });
 
 export async function POST(req: NextRequest) {
-  const supabase = await createServerSupabaseClient();
+  // Create Supabase client
+  const supabase = await createClient();
+
+  // Get logged-in user
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -18,9 +21,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Parse and validate request body
   const body = await req.json();
   const { slot_id, appointment_type, is_priority } = schema.parse(body);
 
+  // Fetch patient profile
   const { data: profile, error: profileError } = await supabase
     .from("patient_profiles")
     .select("id")
@@ -47,6 +52,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Slot unavailable" }, { status: 400 });
   }
 
+  // Insert new appointment
   const { data: appointment, error: appointmentError } = await supabase
     .from("appointments")
     .insert({
@@ -74,7 +80,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Attempt to update the slot
+  // Update the slot as booked
   const { error: updateError } = await supabase
     .from("appointment_slots")
     .update({

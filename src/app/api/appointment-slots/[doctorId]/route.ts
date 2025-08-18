@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server"; // new client
 
 export async function GET(
   request: Request,
@@ -19,7 +19,8 @@ export async function GET(
 
   const doctorId = params.doctorId;
 
-  const supabase = await createServerSupabaseClient();
+  // Use the new async client
+  const supabase = await createClient();
 
   const url = new URL(request.url);
   const date = url.searchParams.get("date") || undefined;

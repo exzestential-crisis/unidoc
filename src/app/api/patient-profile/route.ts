@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server"; // your new server client
 
 export async function GET(_req: NextRequest) {
-  const supabase = await createServerSupabaseClient();
+  // Create Supabase client using your async createClient()
+  const supabase = await createClient();
+
+  // Get authenticated user
   const {
     data: { user },
     error: authError,
@@ -14,6 +17,7 @@ export async function GET(_req: NextRequest) {
 
   console.log("Fetching profile for user ID:", user.id);
 
+  // Fetch patient profile
   const { data: profile, error: profileError } = await supabase
     .from("patient_profiles")
     .select("*")

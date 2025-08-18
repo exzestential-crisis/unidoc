@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server"; // new client
 
 export async function GET(request: Request) {
   try {
@@ -17,7 +17,7 @@ export async function GET(request: Request) {
     const language = searchParams.get("language");
     const min_rating = searchParams.get("min_rating");
 
-    const supabase = await createServerSupabaseClient();
+    const supabase = await createClient();
 
     let query = supabase
       .from("doctor_profiles")
@@ -79,7 +79,6 @@ export async function GET(request: Request) {
       );
     }
 
-    // Return data directly without schema validation
     return NextResponse.json({
       data,
       count: data?.length ?? 0,

@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server"; // new client
 
 export async function GET() {
-  const supabase = await createServerSupabaseClient();
+  // Create Supabase client
+  const supabase = await createClient();
 
   // Get logged-in user
   const {

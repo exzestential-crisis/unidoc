@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createServerSupabaseClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server"; // new client
 
 // GET /api/medical-specialties/[specialtyId]/services
 export async function GET(
@@ -7,10 +7,10 @@ export async function GET(
   { params }: { params: { specialtyId: string } }
 ) {
   try {
-    const supabase = await createServerSupabaseClient();
+    const supabase = await createClient();
     const specialtyId = params.specialtyId;
 
-    // Validate UUID format (optional but recommended)
+    // Validate UUID format
     const uuidRegex =
       /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(specialtyId)) {
@@ -20,7 +20,7 @@ export async function GET(
       );
     }
 
-    // First verify the specialty exists and is active
+    // Verify the specialty exists and is active
     const { data: specialty, error: specialtyError } = await supabase
       .from("medical_specialties")
       .select("id, name, category, is_active")
