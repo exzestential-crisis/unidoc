@@ -93,7 +93,7 @@ export default function HorizontalShowcase({ items }: HorizontalShowcaseCards) {
           {items.length > 8 && (
             <Link href="">
               <div className="flex flex-col justify-center items-center w-32 h-32 rounded-full">
-                <p className="text-center text-zinc-400 text-xl pe-2">
+                <p className="text-center text-neutral-400 text-xl pe-2">
                   See more
                 </p>
               </div>

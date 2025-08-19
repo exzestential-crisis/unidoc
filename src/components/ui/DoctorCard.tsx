@@ -17,7 +17,7 @@ export function DoctorCard({
     <div
       className="
       p-2 my-2 flex-col 
-      border-2 border-zinc-100
+      border-2 border-neutral-100
       rounded-lg bg-white w-[150px]"
     >
       <img
@@ -26,13 +26,13 @@ export function DoctorCard({
         className="rounded-sm w-full h-32 object-cover"
       />
       <div className="flex justify-between pt-3">
-        <p className="text-lg text-zinc-800 font-normal">{name}</p>
+        <p className="text-lg text-neutral-800 font-normal">{name}</p>
         <div className="flex gap-1 items-center">
-          <p className="text-zinc-500 text-sm">{rating}</p>
+          <p className="text-neutral-500 text-sm">{rating}</p>
           <FaStar className="text-amber-300 text-sm" />
         </div>
       </div>
-      <p className="text-sm text-zinc-500 mt-1">{specialty}</p>
+      <p className="text-sm text-neutral-500 mt-1">{specialty}</p>
     </div>
   );
 }

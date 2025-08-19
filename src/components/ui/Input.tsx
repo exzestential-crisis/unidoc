@@ -9,6 +9,7 @@ interface InputProps {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   label: string;
   id: string;
+  name?: string; // added name prop
   showPasswordToggle?: boolean;
   className?: string;
 }
@@ -19,6 +20,7 @@ export default function Input({
   onChange,
   label,
   id,
+  name, // destructure name
   showPasswordToggle = false,
   className = "",
 }: InputProps) {
@@ -40,14 +42,15 @@ export default function Input({
       <input
         type={inputType}
         id={id}
+        name={name} // pass name to input
         value={value}
         onChange={onChange}
         placeholder=" "
-        className="peer w-full p-6 pt-8 text-xl text-black rounded-lg bg-white shadow shadow-zinc-200 placeholder-transparent focus:outline-none"
+        className="peer w-full p-4 pt-8 text-xl text-black rounded-lg bg-neutral-100 shadow-sm shadow-neutral-300 placeholder-transparent focus:outline-none"
       />
       <label
         htmlFor={id}
-        className={`absolute left-6 text-zinc-400 transition-all ${
+        className={`absolute left-6 text-neutral-400 transition-all ${
           value.length > 0
             ? "top-2 text-sm"
             : "top-6 text-xl peer-placeholder-shown:top-6 peer-placeholder-shown:text-xl peer-focus:top-2 peer-focus:text-sm"

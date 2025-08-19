@@ -12,7 +12,7 @@ export default function ClosedEye({ size = "medium" }: ClosedEyeProps) {
   }[size];
 
   return (
-    <div className={`${sizeClass} text-zinc-400 cursor-pointer`}>
+    <div className={`${sizeClass} text-neutral-400 cursor-pointer`}>
       <IoEyeOffOutline />
     </div>
   );
