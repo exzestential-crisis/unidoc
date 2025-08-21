@@ -28,8 +28,7 @@ export async function GET(request: Request) {
           first_name,
           last_name,
           gender,
-          phone,
-          profile_image_url
+          phone
         )
       `
       )

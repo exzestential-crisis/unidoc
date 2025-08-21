@@ -4,7 +4,7 @@ import { useState, ChangeEvent } from "react";
 import { ClosedEye, OpenEye } from "@/components/icons";
 
 interface InputProps {
-  type?: "text" | "email" | "password";
+  type?: string;
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   label: string;

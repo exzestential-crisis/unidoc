@@ -1,15 +1,14 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/utils/supabase/server"; // new client
+import { createClient } from "@/utils/supabase/server";
 
-// GET /api/doctor-profiles/[id]
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  req: Request,
+  { params }: { params: Promise<{ doctorId: string }> }
 ) {
-  try {
-    const supabase = await createClient();
-    const id = params.id;
+  const { doctorId } = await params;
+  const supabase = await createClient();
 
+  try {
     const { data, error } = await supabase
       .from("doctor_profiles")
       .select(
@@ -21,10 +20,13 @@ export async function GET(
           gender,
           phone,
           profile_image_url
+        ),
+        medical_specialties (
+          name
         )
       `
       )
-      .eq("id", id)
+      .eq("id", doctorId)
       .single();
 
     if (error) {
@@ -35,10 +37,7 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({
-      data,
-      success: true,
-    });
+    return NextResponse.json({ data, success: true });
   } catch (error) {
     console.error("Unexpected error:", error);
     return NextResponse.json(

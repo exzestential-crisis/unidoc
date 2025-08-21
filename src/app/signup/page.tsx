@@ -83,7 +83,7 @@ export default function RegisterPage() {
   async function handleSubmit(e: { preventDefault: () => void }) {
     e.preventDefault();
 
-    // Clear all previous errors
+    // Clear previous errors
     setFieldErrors({
       firstName: "",
       lastName: "",
@@ -91,10 +91,7 @@ export default function RegisterPage() {
       password: "",
     });
 
-    // Validate all fields first
-    if (!validateAllFields()) {
-      return;
-    }
+    if (!validateAllFields()) return;
 
     setLoading(true);
 
@@ -106,13 +103,13 @@ export default function RegisterPage() {
           data: {
             first_name: firstName,
             last_name: lastName,
-            user_type: "patient",
+            user_type: "patient", // default type
           },
         },
       });
 
       if (error) {
-        // Handle specific Supabase errors
+        // Handle Supabase errors
         if (
           error.message.includes("email") ||
           error.message.includes("already")
@@ -128,20 +125,20 @@ export default function RegisterPage() {
             password: error.message,
           }));
         } else {
-          // Generic error - show on email field as fallback
           setFieldErrors((prev) => ({
             ...prev,
             email: error.message,
           }));
         }
-      } else if (!data.user) {
+      } else if (data.user) {
+        // ✅ Successful signup, redirect to Complete Profile page
+        const userId = data.user.id;
+        router.push(`/complete-profile?userId=${userId}&type=patient`);
+      } else {
         setFieldErrors((prev) => ({
           ...prev,
-          email: "This email is already in use. Please choose another email.",
+          email: "Unexpected error. Please try again.",
         }));
-      } else {
-        // Success!
-        router.push("/login");
       }
     } catch (err) {
       console.error("Registration error:", err);

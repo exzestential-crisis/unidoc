@@ -41,7 +41,7 @@ export default function AnimatedButton({
           ${style}
           cursor-pointer
           flex items-center justify-center
-          p-2.5 gap-4 rounded-lg
+          p-3 gap-4 rounded-full text-xl
           text-white ${textSize} font-medium
 
           bg-[#009689] /* unidoc-500 */

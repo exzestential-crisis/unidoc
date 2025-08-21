@@ -17,19 +17,22 @@ export async function GET(_req: NextRequest) {
 
   console.log("Fetching profile for user ID:", user.id);
 
-  // Fetch patient profile
-  const { data: profile, error: profileError } = await supabase
+  const { data: profile, error } = await supabase
     .from("patient_profiles")
-    .select("*")
+    .select(
+      `
+    *,
+    user:users(*)
+  `
+    )
     .eq("user_id", user.id)
     .single();
 
-  if (profileError || !profile) {
-    return NextResponse.json(
-      { error: "Patient profile not found" },
-      { status: 404 }
-    );
+  if (error || !profile) {
+    return NextResponse.json({ error: "Profile not found" }, { status: 404 });
   }
+
+  console.log("Full profile:", JSON.stringify(profile, null, 2));
 
   return NextResponse.json(profile);
 }

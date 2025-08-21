@@ -7,7 +7,19 @@ import Navbar from "./Navbar";
 export default function ConditionalNavbar() {
   const pathname = usePathname();
 
-  if (pathname === "/signup" || pathname === "/login") return null;
+  // List of routes where Navbar should NOT be displayed
+  const hideNavbarRoutes = [
+    "/signup",
+    "/login",
+    "/forgot-password",
+    "/complete-profile",
+    "/terms",
+    "/privacy-policy",
+    "/about",
+    "/contact",
+  ];
+
+  if (hideNavbarRoutes.includes(pathname)) return null;
 
   return <Navbar />;
 }

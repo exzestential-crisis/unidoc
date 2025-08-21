@@ -1,25 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { FaRegBell } from "react-icons/fa";
-import {
-  SearchBar,
-  DoctorRowCard,
-  AnimatedButton,
-  ProfileIcon,
-} from "@/components/ui";
-import HorizontalShowcase from "@/components/ui/HorizontalShowcase";
+import { useState } from "react";
 import Link from "next/link";
-
-interface Specialty {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  is_active: boolean;
-  icon: string | null;
-  color: string | null;
-}
+import { SearchBar, DoctorRowCard } from "@/components/ui";
+import HorizontalShowcase from "@/components/ui/HorizontalShowcase";
+import {
+  specialties as allSpecialties,
+  Specialty,
+} from "@/constants/specialties";
 
 interface Doctor {
   name: string;
@@ -28,9 +16,33 @@ interface Doctor {
 }
 
 export default function Home() {
-  const [specialties, setSpecialties] = useState<Specialty[]>([]);
   const [showAllSpecialties, setShowAllSpecialties] = useState(false);
-  const [loadingSpecialties, setLoadingSpecialties] = useState(true);
+
+  // Priority first six specialties
+  const priorityOrder = [
+    "General Practice",
+    "Pediatrics",
+    "Cardiology",
+    "Pulmonologist",
+    "Nephrologist",
+    "Gastro-enterologist",
+  ];
+
+  const prioritized: Specialty[] = [];
+  const remaining: Specialty[] = [];
+
+  allSpecialties.forEach((s) => {
+    if (priorityOrder.includes(s.name)) {
+      prioritized[priorityOrder.indexOf(s.name)] = s;
+    } else {
+      remaining.push(s);
+    }
+  });
+
+  const specialties = [...prioritized, ...remaining];
+  const displayedSpecialties = showAllSpecialties
+    ? specialties
+    : specialties.slice(0, 6);
 
   const doctors: Doctor[] = [
     { name: "Dr. Alice Smith", specialty: "Cardiologist", rating: 4.8 },
@@ -40,53 +52,6 @@ export default function Home() {
     { name: "Dr. Emma Garcia", specialty: "Pediatrician", rating: 4.9 },
     { name: "Dr. Frank Wright", specialty: "Gastroenterologist", rating: 4.4 },
   ];
-
-  useEffect(() => {
-    const fetchSpecialties = async () => {
-      try {
-        const res = await fetch("/api/medical-specialties");
-        const json = await res.json();
-        if (json.success) {
-          const all: Specialty[] = json.data || [];
-
-          // Ensure the first six in this order:
-          const priorityOrder = [
-            "General Practice",
-            "Pediatrics",
-            "Cardiology",
-            "Pulmonologist",
-            "Nephrologist",
-            "Gastro-enterologist",
-          ];
-
-          const prioritized: Specialty[] = [];
-          const remaining: Specialty[] = [];
-
-          all.forEach((s) => {
-            if (priorityOrder.includes(s.name)) {
-              prioritized[priorityOrder.indexOf(s.name)] = s; // keep the order
-            } else {
-              remaining.push(s);
-            }
-          });
-
-          setSpecialties([...prioritized, ...remaining]);
-        } else {
-          console.error("Failed to fetch specialties:", json);
-        }
-      } catch (err) {
-        console.error("Error fetching specialties:", err);
-      } finally {
-        setLoadingSpecialties(false);
-      }
-    };
-
-    fetchSpecialties();
-  }, []);
-
-  const displayedSpecialties = showAllSpecialties
-    ? specialties
-    : specialties.slice(0, 6);
 
   return (
     <div className="homepage bg-[#00bab8]">
@@ -135,47 +100,31 @@ export default function Home() {
             )}
           </div>
 
-          {loadingSpecialties ? (
-            <p>Loading specialties...</p>
-          ) : (
-            <div className="grid grid-cols-3 gap-4">
-              {displayedSpecialties.map((specialty) => (
-                <button
-                  key={specialty.id}
-                  onClick={() =>
-                    console.log("Specialty clicked:", specialty.name)
-                  }
-                  className={`
-                        flex flex-col items-center justify-center
-                        py-8 rounded-xl
-                        text-neutral-600
-                        shadow-[0_6px_0_theme('colors.neutral.200')]
-                        border-4 border-neutral-200
-                        bg-white
-                        hover:bg-neutral-200 hover:border-neutral-300 hover:shadow-[0_6px_0_theme('colors.neutral.300')] hover:translate-y-[1px]
-                        transition-transform
-                      `}
-                >
-                  {/* Icon with circular background */}
-                  {specialty.icon && (
-                    <span
-                      className={`flex items-center justify-center w-16 h-16 rounded-full ${
-                        specialty.color || "bg-gray-100"
-                      } mb-2`}
-                    >
-                      <img
-                        src={specialty.icon}
-                        className="w-12 h-12 object-contain"
-                      />
-                    </span>
-                  )}
-
-                  {/* Specialty name */}
-                  {specialty.name}
-                </button>
-              ))}
-            </div>
-          )}
+          <div className="grid grid-cols-3 gap-4">
+            {displayedSpecialties.map((specialty) => (
+              <button
+                key={specialty.id}
+                onClick={() =>
+                  console.log("Specialty clicked:", specialty.name)
+                }
+                className={`flex flex-col items-center justify-center py-8 rounded-xl text-neutral-600 shadow-[0_6px_0_theme('colors.neutral.200')] border-4 border-neutral-200 bg-white hover:bg-neutral-200 hover:border-neutral-300 hover:shadow-[0_6px_0_theme('colors.neutral.300')] hover:translate-y-[1px] transition-transform`}
+              >
+                {specialty.icon && (
+                  <span
+                    className={`flex items-center justify-center w-16 h-16 rounded-full ${
+                      specialty.color || "bg-gray-100"
+                    } mb-2`}
+                  >
+                    <img
+                      src={specialty.icon}
+                      className="w-12 h-12 object-contain"
+                    />
+                  </span>
+                )}
+                {specialty.name}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Doctors Near You Section */}

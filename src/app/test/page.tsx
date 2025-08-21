@@ -1,42 +1,68 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { set } from "zod";
 
-export default function RescheduleTest() {
-  const [message, setMessage] = useState("");
+type User = {
+  id: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  // other fields if you need
+};
 
-  async function handleReschedule() {
-    const res = await fetch(
-      "/api/appointments/a181a0aa-300c-4c5c-9120-dee903136b31",
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // very important!
-        body: JSON.stringify({
-          slot_id: "00d4b267-9f3f-4d9d-bd99-d4ee7c4a26f7",
-        }),
+type PatientProfile = {
+  id: string;
+  user_id: string;
+  subscription_tier: string;
+  user: User; // 👈 include the nested user
+};
+
+export default function UserHome() {
+  const [userId, setUserId] = useState<string | null>(null);
+  const [patientProfileId, setPatientProfileId] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const res = await fetch("/api/patient-profile");
+
+        if (!res.ok) {
+          throw new Error(`Error: ${res.status}`);
+        }
+        const profile: PatientProfile = await res.json();
+
+        setUserName(profile.user.first_name + " " + profile.user.last_name);
+        setUserId(profile.user_id);
+        setPatientProfileId(profile.id);
+      } catch (err: any) {
+        setError(err.message || "Failed to fetch profile");
+      } finally {
+        setLoading(false);
       }
-    );
-
-    const data = await res.json();
-    if (!res.ok) {
-      setMessage("❌ Error: " + data.error);
-    } else {
-      setMessage("✅ Rescheduled: " + JSON.stringify(data));
     }
-  }
+
+    fetchProfile();
+  }, []);
+
+  if (loading) return <div>Loading your profile...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="p-4">
-      <button
-        onClick={handleReschedule}
-        className="px-4 py-2 bg-blue-600 text-white rounded"
-      >
-        Test Reschedule
-      </button>
-      {message && <p className="mt-4">{message}</p>}
+    <div>
+      <h1>You are logged in</h1>
+      <p>
+        <strong>User Name:</strong> {userName}
+      </p>
+      <p>
+        <strong>User ID:</strong> {userId}
+      </p>
+      <p>
+        <strong>Patient Profile ID:</strong> {patientProfileId}
+      </p>
     </div>
   );
 }
