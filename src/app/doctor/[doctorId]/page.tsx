@@ -1,8 +1,10 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function DoctorPage() {
+  const router = useRouter();
+
   const { doctorId } = useParams<{ doctorId: string }>();
   const [doctor, setDoctor] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -36,6 +38,10 @@ export default function DoctorPage() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
   if (!doctor) return <p>No doctor found</p>;
+
+  const handleBookClick = () => {
+    router.push(`/book?doctorId=${doctor.id}`);
+  };
 
   return (
     <div className="p-6 max-w-2xl mx-auto">

@@ -14,76 +14,63 @@ export async function GET(
     const uuidRegex =
       /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(doctorId)) {
-      return NextResponse.json(
-        { error: "Invalid doctor ID format" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid doctor ID" }, { status: 400 });
     }
 
-    // Fetch doctor and their specialty
+    // Fetch doctor profile
     const { data: doctor, error: doctorError } = await supabase
       .from("doctor_profiles")
-      .select("id, specialization_id, users(first_name, last_name)")
+      .select(
+        "id, user_id, specialization_id, years_experience, consultation_fee, bio, license_number"
+      )
       .eq("id", doctorId)
-      .single();
+      .maybeSingle(); // safe if no doctor
 
     if (doctorError || !doctor) {
       return NextResponse.json({ error: "Doctor not found" }, { status: 404 });
     }
 
-    // Get the specialty info
+    // Fetch specialty
     const { data: specialty, error: specialtyError } = await supabase
       .from("medical_specialties")
       .select("id, name, category")
       .eq("id", doctor.specialization_id)
       .eq("is_active", true)
-      .single();
+      .maybeSingle();
 
     if (specialtyError || !specialty) {
       return NextResponse.json(
-        { error: "Doctor's specialty not found or inactive" },
+        { error: "Specialty not found or inactive" },
         { status: 404 }
       );
     }
 
-    // Fetch active services for that specialty
+    // Fetch active services
     const { data: services, error: servicesError } = await supabase
       .from("medical_services")
-      .select("id, name, description, is_active")
+      .select("id, name, description")
       .eq("specialty_id", specialty.id)
       .eq("is_active", true)
       .order("name");
 
     if (servicesError) {
-      console.error("Supabase error fetching services:", servicesError.message);
+      console.error(servicesError);
       return NextResponse.json(
-        { error: "Failed to fetch services", details: servicesError.message },
+        { error: "Failed to fetch services" },
         { status: 500 }
       );
     }
 
     return NextResponse.json({
       data: {
-        doctor: {
-          id: doctor.id,
-          name: `Dr. ${doctor.users[0]?.first_name ?? ""} ${
-            doctor.users[0]?.last_name ?? ""
-          }`,
-        },
-        specialty: {
-          id: specialty.id,
-          name: specialty.name,
-          category: specialty.category,
-        },
+        doctor,
+        specialty,
         services: services || [],
       },
       success: true,
-      message: `Found ${services?.length || 0} services for Dr. ${
-        doctor.users[0]?.first_name ?? ""
-      } ${doctor.users[0]?.last_name ?? ""}`,
     });
   } catch (error) {
-    console.error("Unexpected error:", error);
+    console.error(error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
