@@ -3,12 +3,12 @@ import { createClient } from "@/utils/supabase/server";
 
 export async function GET(
   req: Request,
-  { params }: { params: { doctorId: string } } // <- remove Promise
+  { params }: { params: { doctorId: string } }
 ) {
   const { doctorId } = params;
   const supabase = await createClient();
 
-  // Validate UUID format
+  // ✅ Validate UUID format
   const uuidRegex =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   if (!uuidRegex.test(doctorId)) {
@@ -19,7 +19,7 @@ export async function GET(
   }
 
   try {
-    // Fetch doctor profile along with user and specialty
+    // ✅ Fetch doctor profile with user + specialty
     const { data: doctor, error: doctorError } = await supabase
       .from("doctor_profiles")
       .select(
@@ -39,7 +39,7 @@ export async function GET(
       `
       )
       .eq("id", doctorId)
-      .maybeSingle(); // <- safer than .single()
+      .maybeSingle(); // safer than .single()
 
     if (doctorError) {
       console.error("Supabase error:", doctorError.message);
@@ -56,7 +56,7 @@ export async function GET(
       return NextResponse.json({ error: "Doctor not found" }, { status: 404 });
     }
 
-    // Fetch services for this doctor's specialty
+    // ✅ Fetch services for this doctor's specialty
     const { data: services, error: servicesError } = await supabase
       .from("medical_services")
       .select("id, name, description")
@@ -72,13 +72,11 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({
-      data: {
-        doctor,
-        services: services || [],
-      },
-      success: true,
-    });
+    // ✅ Keep original structure { data, success: true }
+    return NextResponse.json(
+      { data: { doctor, services: services || [] }, success: true },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Unexpected error:", error);
     return NextResponse.json(

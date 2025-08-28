@@ -16,8 +16,10 @@ export default function DoctorPage() {
         const response = await fetch(`/api/doctors/${doctorId}`);
         if (response.ok) {
           const json = await response.json();
-          console.log("API Response:", json.data); // Debug log
-          setDoctor(json.data);
+          console.log("API Response:", json);
+
+          // flatten it so doctor contains everything
+          setDoctor({ ...json.data.doctor, services: json.data.services });
         } else {
           const errorData = await response.json();
           setError(errorData.error || "Failed to fetch doctor");
