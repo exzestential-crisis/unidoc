@@ -97,16 +97,55 @@ export default function BookPage() {
     }
   };
 
-  const handleNext = () => {
+  // Replace the handleNext function in your BookPage component with this:
+
+  const handleNext = async () => {
     if (step === 1 && selectedService) {
       setStep(2); // go to concern input
     } else if (step === 2 && concern.trim() !== "") {
       fetchSlots();
       setStep(3); // go to appointment selection
-    } else if (step === 3 && selectedSlot) {
-      alert(
-        `Booking confirmed for ${doctor?.name}, service: ${selectedService?.name}, slot: ${selectedSlot.appointment_date} @ ${selectedSlot.start_time}\nConcern: ${concern}`
-      );
+    } else if (step === 3 && selectedSlot && selectedService) {
+      // Make the actual booking API call
+      setLoading(true);
+      try {
+        const response = await fetch("/api/book", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            slot_id: selectedSlot.id,
+            services_id: selectedService.id,
+            concern: concern.trim(),
+            appointment_type: "regular", // Default value
+            is_priority: false, // Default value
+          }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || "Failed to book appointment");
+        }
+
+        // Show success message
+        alert(
+          `Booking confirmed!\n` +
+            `Doctor: ${result.data.appointment.doctor_name}\n` +
+            `Service: ${result.data.appointment.service_name}\n` +
+            `Date: ${selectedSlot.appointment_date}\n` +
+            `Time: ${selectedSlot.start_time}\n` +
+            `Concern: ${concern}`
+        );
+
+        // Optionally redirect or reset form
+        // window.location.href = '/appointments'; // Redirect to appointments page
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
