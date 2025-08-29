@@ -23,6 +23,15 @@ export async function GET(
         ),
         medical_specialties (
           name
+        ),
+        doctor_hospitals (
+          id,
+          is_primary,
+          hospitals (
+            id,
+            name,
+            address
+          )
         )
       `
       )

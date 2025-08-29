@@ -20,7 +20,7 @@ export default function ArrowBack({ size = "medium" }: ArrowBackType) {
 
   return (
     <div
-      className={`cursor-pointer text-black/30 ${textSize} p-2`}
+      className={`cursor-pointer text-black/30 ${textSize}`}
       onClick={() => router.back()}
     >
       <div className="flex items-center justify-center bg-black/10 ps-1 rounded-full w-10 h-10">

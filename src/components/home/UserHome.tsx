@@ -144,7 +144,7 @@ export default function Home() {
 
   // Skeleton components
   const DoctorRowCardSkeleton = () => (
-    <div className="flex items-center p-2 bg-white border-2 border-neutral-100 rounded-lg h-32 gap-2">
+    <div className="flex items-center p-2 border-2 border-neutral-100 rounded-lg h-32 gap-2">
       <div className="h-28 w-24 bg-gray-200 rounded-sm animate-pulse" />
       <div className="flex flex-col justify-between h-full py-1 flex-1">
         <div>
@@ -161,7 +161,7 @@ export default function Home() {
   );
 
   const DoctorCardSkeleton = () => (
-    <div className="p-2 my-2 flex-col border-2 border-neutral-100 rounded-lg bg-white w-[150px]">
+    <div className="p-2 my-2 flex-col border-2 border-neutral-100 rounded-lg w-[150px]">
       <div className="rounded-sm w-full h-32 bg-gray-200 animate-pulse" />
       <div className="flex justify-between pt-3">
         <div className="h-6 bg-gray-200 rounded w-20 animate-pulse" />

@@ -44,4 +44,5 @@ module.exports = {
     "bg-pink-50",
     "bg-rose-50",
   ],
+  darkMode: false,
 };

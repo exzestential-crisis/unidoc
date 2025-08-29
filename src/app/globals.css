@@ -34,3 +34,17 @@ body {
 .hide-scrollbar::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+/* Force light mode globally */
+:root,
+html,
+body {
+  background-color: white !important;
+  color: #1f2937 !important; /* Tailwind neutral-800 */
+}
+
+/* Prevent Tailwind dark variants from applying */
+html.dark * {
+  background-color: white !important;
+  color: #1f2937 !important;
+}

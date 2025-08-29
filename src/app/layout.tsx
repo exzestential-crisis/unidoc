@@ -25,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" className="bg-white text-neutral-800">
+      <body className="min-h-screen bg-white text-neutral-800">
         <ConditionalNavbar />
         {children}
       </body>

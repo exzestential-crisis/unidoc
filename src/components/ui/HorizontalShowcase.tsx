@@ -3,6 +3,7 @@ import { DoctorCard } from "./DoctorCard";
 import { useRef, useState, useEffect } from "react";
 
 type Item = {
+  id: string;
   name: string;
   rating: number;
   specialty: string;
@@ -83,6 +84,7 @@ export default function HorizontalShowcase({ items }: HorizontalShowcaseCards) {
           {visibleItems.map((item, index) => (
             <div key={index}>
               <DoctorCard
+                id={item.id}
                 name={item.name}
                 image={item.img}
                 rating={item.rating}
