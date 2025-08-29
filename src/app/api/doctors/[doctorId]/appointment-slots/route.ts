@@ -22,7 +22,7 @@ export async function GET(
     );
   }
 
-  const doctorId = params.doctorId;
+  const doctorId = await params.doctorId;
 
   // 2️⃣ Parse query params (optional date)
   const url = new URL(request.url);

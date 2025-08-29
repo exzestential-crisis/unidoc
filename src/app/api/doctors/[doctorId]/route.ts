@@ -5,7 +5,7 @@ export async function GET(
   req: Request,
   { params }: { params: { doctorId: string } }
 ) {
-  const { doctorId } = params;
+  const { doctorId } = await params;
   const supabase = await createClient();
 
   // ✅ Validate UUID format
