@@ -1,6 +1,6 @@
 "use client";
 import { ArrowBack } from "@/components/nav";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { specialties as allSpecialties } from "@/constants/specialties";
 import { FaCalendarCheck, FaStar } from "react-icons/fa";
@@ -8,6 +8,8 @@ import { FaClipboardUser } from "react-icons/fa6";
 import { IoChatboxEllipses } from "react-icons/io5";
 
 export default function DoctorPage() {
+  const router = useRouter();
+
   const { doctorId } = useParams<{ doctorId: string }>();
   const [doctor, setDoctor] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -19,7 +21,10 @@ export default function DoctorPage() {
         const response = await fetch(`/api/doctors/${doctorId}`);
         if (response.ok) {
           const json = await response.json();
-          setDoctor(json.data);
+          console.log("API Response:", json);
+
+          // flatten it so doctor contains everything
+          setDoctor({ ...json.data.doctor, services: json.data.services });
         } else {
           const errorData = await response.json();
           setError(errorData.error || "Failed to fetch doctor");
@@ -45,6 +50,10 @@ export default function DoctorPage() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
   if (!doctor) return <p>No doctor found</p>;
+
+  const handleBookClick = () => {
+    router.push(`/book?doctorId=${doctor.id}`);
+  };
 
   return (
     <div className="relative p-6 mx-auto min-h-screen">

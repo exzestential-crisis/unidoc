@@ -3,13 +3,24 @@ import { createClient } from "@/utils/supabase/server";
 
 export async function GET(
   req: Request,
-  { params }: { params: Promise<{ doctorId: string }> }
+  { params }: { params: { doctorId: string } }
 ) {
   const { doctorId } = await params;
   const supabase = await createClient();
 
+  // ✅ Validate UUID format
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  if (!uuidRegex.test(doctorId)) {
+    return NextResponse.json(
+      { error: "Invalid doctor ID format" },
+      { status: 400 }
+    );
+  }
+
   try {
-    const { data, error } = await supabase
+    // ✅ Fetch doctor profile with user + specialty
+    const { data: doctor, error: doctorError } = await supabase
       .from("doctor_profiles")
       .select(
         `
@@ -22,6 +33,7 @@ export async function GET(
           profile_image_url
         ),
         medical_specialties (
+          id,
           name
         ),
         doctor_hospitals (
@@ -36,17 +48,44 @@ export async function GET(
       `
       )
       .eq("id", doctorId)
-      .single();
+      .maybeSingle(); // safer than .single()
 
-    if (error) {
-      console.error("Supabase error:", error.message);
+    if (doctorError) {
+      console.error("Supabase error:", doctorError.message);
       return NextResponse.json(
-        { error: "Failed to fetch doctor profile", details: error.message },
+        {
+          error: "Failed to fetch doctor profile",
+          details: doctorError.message,
+        },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({ data, success: true });
+    if (!doctor) {
+      return NextResponse.json({ error: "Doctor not found" }, { status: 404 });
+    }
+
+    // ✅ Fetch services for this doctor's specialty
+    const { data: services, error: servicesError } = await supabase
+      .from("medical_services")
+      .select("id, name, description")
+      .eq("specialty_id", doctor.specialization_id)
+      .eq("is_active", true)
+      .order("name");
+
+    if (servicesError) {
+      console.error("Supabase error fetching services:", servicesError.message);
+      return NextResponse.json(
+        { error: "Failed to fetch services", details: servicesError.message },
+        { status: 500 }
+      );
+    }
+
+    // ✅ Keep original structure { data, success: true }
+    return NextResponse.json(
+      { data: { doctor, services: services || [] }, success: true },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Unexpected error:", error);
     return NextResponse.json(
