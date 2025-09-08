@@ -49,6 +49,7 @@ export const transformDoctorForRowCard = (doctor: any) => {
     rating: doctor.rating_average || 0,
     specialty: doctor.medical_specialties?.name || "General",
     hospital: hospitalName,
+    reviews: doctor.total_reviews || 0,
   };
 };
 export const categorizeDoctors = (doctors: Doctor[]) => {

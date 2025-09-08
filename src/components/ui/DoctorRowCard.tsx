@@ -28,19 +28,21 @@ export function DoctorRowCard({
           alt={name}
           className="h-28 w-28 rounded-md object-cover flex-shrink-0"
         />
-        <div className="flex flex-col justify-between h-full py-2">
+
+        {/* <-- This div is the flex column next to the image */}
+        <div className="flex flex-col justify-between h-full flex-1 min-w-0 py-2">
           <div>
-            <p className="font-semibold text-lg text-neutral-800 truncate">
+            <p className="font-semibold text-xl text-neutral-800 truncate">
               {name}
             </p>
-            <p className="font-medium text-neutral-500 text-sm truncate">
+            <p className="font-medium text-neutral-500 truncate">
               {specialty} | {hospital}
             </p>
           </div>
           <div className="flex items-center gap-2">
             <FaStar className="text-amber-400" />
             <p className="font-medium text-neutral-800">{rating.toFixed(1)}</p>
-            <p className="text-neutral-400 text-sm">({reviews} reviews)</p>
+            <p className="text-neutral-400">({reviews} reviews)</p>
           </div>
         </div>
       </div>

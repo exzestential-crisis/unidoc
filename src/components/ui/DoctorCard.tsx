@@ -41,16 +41,16 @@ export function DoctorCard({
         </p>
 
         {/* Specialty + rating row */}
-        <div className="flex justify-between items-center mt-2">
-          <p className="text-neutral-500 truncate">{specialty}</p>
+        <div className="flex justify-between items-center mt-1">
+          <p className="text-neutral-500 text-md truncate">{specialty}</p>
           <div className="flex items-center gap-1">
             <p className="text-sm text-neutral-600">{rating}</p>
-            <FaStar className="text-amber-400 text-sm" />
+            <FaStar className="text-amber-400 " />
           </div>
         </div>
 
         {/* Hospital */}
-        <p className=" text-neutral-400 truncate">
+        <p className=" text-neutral-500 truncate mt-1">
           {hospital || "No hospital listed"}
         </p>
       </div>

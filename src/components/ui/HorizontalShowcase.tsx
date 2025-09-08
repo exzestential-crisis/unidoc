@@ -85,16 +85,15 @@ export default function HorizontalShowcase({ items }: HorizontalShowcaseCards) {
       >
         <div className="flex w-max items-center gap-4">
           {visibleItems.map((item) => (
-            <div key={item.id}>
-              <DoctorCard
-                id={item.id}
-                name={item.name}
-                image={item.image} // forward image, fallback to empty string
-                rating={item.rating}
-                specialty={item.specialty}
-                hospital={item.hospital} // forward hospital!
-              />
-            </div>
+            <DoctorCard
+              key={item.id} // you can place it directly on DoctorCard
+              id={item.id}
+              name={item.name}
+              image={item.image}
+              rating={item.rating}
+              specialty={item.specialty}
+              hospital={item.hospital}
+            />
           ))}
 
           {items.length > 8 && (

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCalendarCheck, FaClock, FaMapMarkerAlt } from "react-icons/fa";
 import { FaUser, FaCalendarDays, FaStethoscope } from "react-icons/fa6";
-import { LoadingPage } from "@/components/pages/LoadingPage";
+import { AppointmentPageSkeleton } from "@/components/skeletons";
 
 interface DoctorProfile {
   id: string;
@@ -165,7 +165,7 @@ export default function AppointmentsPage() {
       apt.status !== "scheduled"
   );
 
-  if (loading) return <LoadingPage message="Loading appointments..." />;
+  if (loading) return <AppointmentPageSkeleton />;
   if (error) return <p className="text-red-500 p-4">Error: {error}</p>;
 
   return (

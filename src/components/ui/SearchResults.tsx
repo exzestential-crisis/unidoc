@@ -28,14 +28,15 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   const renderSkeletons = () => {
     const SkeletonComponent =
       viewMode === "cards" ? DoctorCardSkeleton : DoctorRowCardSkeleton;
-    return (
-      <div
-        className={
-          viewMode === "cards"
-            ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-            : "space-y-4"
-        }
-      >
+
+    return viewMode === "cards" ? (
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center w-full">
+        {[...Array(8)].map((_, i) => (
+          <SkeletonComponent key={i} />
+        ))}
+      </div>
+    ) : (
+      <div className="space-y-4">
         {[...Array(8)].map((_, i) => (
           <SkeletonComponent key={i} />
         ))}

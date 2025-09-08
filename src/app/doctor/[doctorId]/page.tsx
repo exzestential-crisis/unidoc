@@ -8,6 +8,7 @@ import { FaClipboardUser } from "react-icons/fa6";
 import { IoChatboxEllipses } from "react-icons/io5";
 import AnimatedButton from "@/components/ui/AnimatedButton";
 import { LoadingPage } from "@/components/pages/LoadingPage";
+import { DoctorPageSkeleton } from "@/components/skeletons";
 
 export default function DoctorPage() {
   const router = useRouter();
@@ -48,7 +49,7 @@ export default function DoctorPage() {
     return specialty?.name || "General Practice";
   };
 
-  if (loading) return <LoadingPage message="Loading doctor details..." />;
+  if (loading) return <DoctorPageSkeleton />;
   if (error) return <p className="text-red-500">Error: {error}</p>;
   if (!doctor) return <p>No doctor found</p>;
 

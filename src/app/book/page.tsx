@@ -1,5 +1,6 @@
 "use client";
 
+import { BookPageSkeleton } from "@/components/skeletons";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 
@@ -7,7 +8,7 @@ interface Service {
   id: string;
   name: string;
   description?: string;
-  icon?: string; // Add icon field for services
+  icon?: string;
 }
 
 interface Doctor {
@@ -117,8 +118,8 @@ export default function BookPage() {
             slot_id: selectedSlot.id,
             services_id: selectedService.id,
             concern: concern.trim(),
-            appointment_type: "regular", // Default value
-            is_priority: false, // Default value
+            appointment_type: "regular",
+            is_priority: false,
           }),
         });
 
@@ -138,7 +139,7 @@ export default function BookPage() {
             `Concern: ${concern}`
         );
 
-        window.location.href = "/appointments"; // Redirect to appointments page
+        window.location.href = "/appointments";
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -156,7 +157,7 @@ export default function BookPage() {
     }, {});
   }, [slots]);
 
-  // Service icons mapping (you can customize these)
+  // Service icons mapping
   const getServiceIcon = (serviceName: string) => {
     const iconMap: Record<string, string> = {
       consultation: "🦷",
@@ -169,12 +170,8 @@ export default function BookPage() {
     return iconMap[serviceName.toLowerCase()] || "🦷";
   };
 
-  if (loading)
-    return (
-      <div className="flex justify-center items-center h-64">
-        <p className="text-gray-600">Loading...</p>
-      </div>
-    );
+  if (loading) return <BookPageSkeleton />;
+
   if (error)
     return (
       <div className="p-6 max-w-2xl mx-auto">
@@ -189,8 +186,9 @@ export default function BookPage() {
     );
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
-      <div className="p-6 max-w-md mx-auto bg-white min-h-screen">
+    <div className="min-h-screen text-gray-900 flex flex-col">
+      {/* Scrollable content */}
+      <div className="p-6 w-full bg-white flex-1 overflow-y-auto">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-1">
             Book Appointment
@@ -200,7 +198,7 @@ export default function BookPage() {
 
         {/* Step 1: Services */}
         {step === 1 && (
-          <div className="flex-1">
+          <div className="mb-24">
             <div className="mb-6">
               <h2 className="text-lg font-semibold text-gray-700 uppercase tracking-wide ">
                 HOW WE MAY HELP YOU?
@@ -208,44 +206,42 @@ export default function BookPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-4 mb-8">
-              {services.length > 0
-                ? services.map((service) => (
-                    <div key={service.id} className="relative">
-                      <input
-                        type="radio"
-                        name="service"
-                        value={service.id}
-                        id={`service-${service.id}`}
-                        className="sr-only"
-                        checked={selectedService?.id === service.id}
-                        onChange={() => setSelectedService(service)}
-                      />
-                      <label
-                        htmlFor={`service-${service.id}`}
-                        className={`flex items-center justify-center p-6 rounded-2xl h-40 cursor-pointer transition-all duration-200 ${
+              {services.map((service) => (
+                <div key={service.id} className="relative">
+                  <input
+                    type="radio"
+                    name="service"
+                    value={service.id}
+                    id={`service-${service.id}`}
+                    className="sr-only"
+                    checked={selectedService?.id === service.id}
+                    onChange={() => setSelectedService(service)}
+                  />
+                  <label
+                    htmlFor={`service-${service.id}`}
+                    className={`flex items-center justify-center p-6 rounded-2xl h-40 cursor-pointer transition-all duration-200 ${
+                      selectedService?.id === service.id
+                        ? "bg-[#00bab8] text-white shadow-lg transform scale-105"
+                        : "bg-white border border-gray-200 hover:border-[#00bab8] hover:shadow-md"
+                    }`}
+                  >
+                    <div className="text-center">
+                      <div
+                        className={`text-3xl mb-3 ${
                           selectedService?.id === service.id
-                            ? "bg-[#00bab8] text-white shadow-lg transform scale-105"
-                            : "bg-white border border-gray-200 hover:border-[#00bab8] hover:shadow-md"
+                            ? "filter brightness-0 invert"
+                            : ""
                         }`}
                       >
-                        <div className="text-center">
-                          <div
-                            className={`text-3xl mb-3 ${
-                              selectedService?.id === service.id
-                                ? "filter brightness-0 invert"
-                                : ""
-                            }`}
-                          >
-                            {getServiceIcon(service.name)}
-                          </div>
-                          <div className="font-medium text-sm leading-tight">
-                            {service.name}
-                          </div>
-                        </div>
-                      </label>
+                        {getServiceIcon(service.name)}
+                      </div>
+                      <div className="font-medium text-sm leading-tight">
+                        {service.name}
+                      </div>
                     </div>
-                  ))
-                : null}
+                  </label>
+                </div>
+              ))}
 
               {/* Other service option */}
               <div className="relative">
@@ -286,37 +282,15 @@ export default function BookPage() {
               </div>
             </div>
 
-            {/* Step indicator */}
             <div className="text-center mb-6">
               <span className="text-gray-400 text-sm">2 of 4</span>
-            </div>
-
-            {/* Navigation buttons */}
-            <div className="flex gap-3">
-              <button
-                className="flex-1 py-3 px-6 border border-gray-300 text-gray-700 rounded-lg font-medium"
-                onClick={() => window.history.back()}
-              >
-                BACK
-              </button>
-              <button
-                className={`flex-1 py-3 px-6 rounded-lg font-medium text-white transition-all duration-200 ${
-                  selectedService
-                    ? "bg-[#00bab8] hover:bg-[#00a8a6]"
-                    : "bg-gray-300 cursor-not-allowed"
-                }`}
-                onClick={handleNext}
-                disabled={!selectedService}
-              >
-                NEXT
-              </button>
             </div>
           </div>
         )}
 
         {/* Step 2: Concern Input */}
         {step === 2 && (
-          <div className="flex-1">
+          <div className="mb-24">
             <div className="mb-6">
               <h2 className="text-lg font-semibold text-gray-700 uppercase tracking-wide mb-4">
                 DESCRIBE YOUR CONCERN
@@ -333,32 +307,12 @@ export default function BookPage() {
             <div className="text-center mb-6">
               <span className="text-gray-400 text-sm">3 of 4</span>
             </div>
-
-            <div className="flex gap-3">
-              <button
-                className="flex-1 py-3 px-6 border border-gray-300 text-gray-700 rounded-lg font-medium"
-                onClick={() => setStep(step - 1)}
-              >
-                BACK
-              </button>
-              <button
-                className={`flex-1 py-3 px-6 rounded-lg font-medium text-white transition-all duration-200 ${
-                  concern.trim() !== ""
-                    ? "bg-[#00bab8] hover:bg-[#00a8a6]"
-                    : "bg-gray-300 cursor-not-allowed"
-                }`}
-                onClick={handleNext}
-                disabled={concern.trim() === ""}
-              >
-                NEXT
-              </button>
-            </div>
           </div>
         )}
 
         {/* Step 3: Appointment Slots */}
         {step === 3 && (
-          <div className="flex-1">
+          <div className="mb-24">
             <div className="mb-6">
               <h2 className="text-lg font-semibold text-gray-700 uppercase tracking-wide mb-4">
                 SELECT APPOINTMENT TIME
@@ -430,28 +384,36 @@ export default function BookPage() {
             <div className="text-center mb-6">
               <span className="text-gray-400 text-sm">4 of 4</span>
             </div>
-
-            <div className="flex gap-3">
-              <button
-                className="flex-1 py-3 px-6 border border-gray-300 text-gray-700 rounded-lg font-medium"
-                onClick={() => setStep(step - 1)}
-              >
-                BACK
-              </button>
-              <button
-                className={`flex-1 py-3 px-6 rounded-lg font-medium text-white transition-all duration-200 ${
-                  selectedSlot
-                    ? "bg-[#00bab8] hover:bg-[#00a8a6]"
-                    : "bg-gray-300 cursor-not-allowed"
-                }`}
-                onClick={handleNext}
-                disabled={!selectedSlot}
-              >
-                CONFIRM BOOKING
-              </button>
-            </div>
           </div>
         )}
+      </div>
+
+      {/* Fixed footer buttons */}
+      <div className="fixed bottom-0 left-0 w-full bg-white p-4 border-t border-gray-200 flex gap-3">
+        <button
+          className="flex-1 py-3 px-6 border border-gray-300 text-gray-700 rounded-lg font-medium"
+          onClick={() => setStep(step - 1)}
+          disabled={step === 1}
+        >
+          BACK
+        </button>
+        <button
+          className={`flex-1 py-3 px-6 rounded-lg font-medium text-white transition-all duration-200 ${
+            (step === 1 && selectedService) ||
+            (step === 2 && concern.trim() !== "") ||
+            (step === 3 && selectedSlot)
+              ? "bg-[#00bab8] hover:bg-[#00a8a6]"
+              : "bg-gray-300 cursor-not-allowed"
+          }`}
+          onClick={handleNext}
+          disabled={
+            (step === 1 && !selectedService) ||
+            (step === 2 && concern.trim() === "") ||
+            (step === 3 && !selectedSlot)
+          }
+        >
+          {step === 3 ? "CONFIRM BOOKING" : "NEXT"}
+        </button>
       </div>
     </div>
   );

@@ -82,7 +82,7 @@ function SearchPageContent() {
         {/* Search Header - Mobile responsive */}
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
           {/* Title and Results Count */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+          <div className="flex flex-col gap-1 sm:gap-2">
             <h2 className="text-lg sm:text-xl font-semibold text-[#525858] leading-tight">
               Search results{" "}
               {filters.q ? (
@@ -97,11 +97,10 @@ function SearchPageContent() {
               ) : null}
             </h2>
 
-            {!loading && (
-              <span className="text-sm text-gray-500 order-first sm:order-none">
-                {doctors.length} doctor{doctors.length !== 1 ? "s" : ""} found
-              </span>
-            )}
+            {/* Move count below */}
+            <span className="text-sm text-gray-500">
+              {doctors.length} doctor{doctors.length !== 1 ? "s" : ""} found
+            </span>
           </div>
 
           {/* Action Buttons - Mobile responsive */}

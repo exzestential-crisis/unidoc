@@ -20,7 +20,7 @@ export default function ConditionalNavbar() {
   ];
 
   // Route prefixes where Navbar should be hidden for ALL nested paths
-  const hideRoutePrefixes = ["/doctor", "/appointments/"];
+  const hideRoutePrefixes = ["/doctor", "/appointments/", "/book"];
 
   const shouldHide =
     hideExactRoutes.includes(pathname) ||

@@ -2,39 +2,53 @@
 import React from "react";
 
 export const DoctorRowCardSkeleton = () => (
-  <div className="flex items-center p-2 border-2 border-neutral-100 rounded-lg h-32 gap-2">
-    <div className="h-28 w-24 bg-gray-200 rounded-sm animate-pulse" />
-    <div className="flex flex-col justify-between h-full py-1 flex-1">
+  <div className="flex items-center p-4 border-2 border-neutral-100 rounded-xl h-36 gap-4 animate-pulse">
+    {/* Image placeholder */}
+    <div className="h-28 w-28 bg-gray-300 rounded-md flex-shrink-0" />
+
+    {/* Info column */}
+    <div className="flex flex-col justify-between h-full flex-1 min-w-0 py-2">
       <div>
-        <div className="h-6 bg-gray-200 rounded w-32 mb-2 animate-pulse" />
-        <div className="h-4 bg-gray-200 rounded w-48 animate-pulse" />
+        {/* Name placeholder */}
+        <div className="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
+        {/* Specialty + Hospital placeholder */}
+        <div className="h-4 bg-gray-300 rounded w-2/3"></div>
       </div>
+      {/* Rating row placeholder */}
       <div className="flex items-center gap-2">
-        <div className="h-4 w-4 bg-gray-200 rounded animate-pulse" />
-        <div className="h-4 bg-gray-200 rounded w-8 animate-pulse" />
-        <div className="h-4 bg-gray-200 rounded w-20 animate-pulse" />
+        <div className="h-4 w-4 bg-gray-300 rounded"></div>
+        <div className="h-5 bg-gray-300 rounded w-8"></div>
+        <div className="h-4 bg-gray-300 rounded w-20"></div>
       </div>
     </div>
   </div>
 );
 
 export const DoctorCardSkeleton = () => (
-  <div className="p-2 my-2 flex-col border-2 border-neutral-100 rounded-lg w-[150px]">
-    <div className="rounded-sm w-full h-32 bg-gray-200 animate-pulse" />
-    <div className="flex justify-between pt-3">
-      <div className="h-6 bg-gray-200 rounded w-20 animate-pulse" />
-      <div className="flex gap-1 items-center">
-        <div className="h-4 bg-gray-200 rounded w-6 animate-pulse" />
-        <div className="h-4 w-4 bg-gray-200 rounded animate-pulse" />
+  <div className="p-4 flex flex-col border-2 border-neutral-100 rounded-xl w-[220px] h-[290px] animate-pulse">
+    {/* Image placeholder */}
+    <div className="w-full h-44 bg-gray-300 rounded-md" />
+
+    {/* Name placeholder */}
+    <div className="mt-3 h-6 bg-gray-300 rounded w-3/4" />
+
+    {/* Specialty + rating row placeholder */}
+    <div className="flex justify-between items-center mt-2">
+      <div className="h-5 bg-gray-300 rounded w-1/2"></div>
+      <div className="flex items-center gap-1">
+        <div className="h-4 w-6 bg-gray-300 rounded"></div>
+        <div className="h-4 w-4 bg-gray-300 rounded"></div>
       </div>
     </div>
-    <div className="h-4 bg-gray-200 rounded w-16 mt-1 animate-pulse" />
+
+    {/* Hospital placeholder */}
+    <div className="mt-2 h-4 bg-gray-300 rounded w-2/3"></div>
   </div>
 );
 
 export const HorizontalShowcaseSkeleton = () => (
   <div className="flex gap-2 overflow-hidden">
-    {[...Array(4)].map((_, i) => (
+    {[...Array(2)].map((_, i) => (
       <DoctorCardSkeleton key={i} />
     ))}
   </div>
