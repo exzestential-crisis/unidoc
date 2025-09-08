@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/utils/supabase/server"; // new client
+import { createClient } from "@/utils/supabase/server";
 
 export async function GET(request: Request) {
   try {
@@ -9,7 +9,13 @@ export async function GET(request: Request) {
     const offset = searchParams.get("offset");
     const verified = searchParams.get("verified");
     const accepting_patients = searchParams.get("accepting_patients");
-    const specialization_ids = searchParams.getAll("specialization_id");
+
+    // Handle both 'specialization_id' and 'specialty' parameters
+    const specialization_ids = [
+      ...searchParams.getAll("specialization_id"),
+      ...searchParams.getAll("specialty"),
+    ].filter(Boolean);
+
     const q = searchParams.get("q");
     const min_exp = searchParams.get("min_experience");
     const max_exp = searchParams.get("max_experience");
@@ -23,17 +29,32 @@ export async function GET(request: Request) {
       .from("doctor_profiles")
       .select(
         `
-        *,
-        users (
-          first_name,
-          last_name,
-          gender,
-          phone
-        )
-      `
+          *,
+          users (
+            first_name,
+            last_name,
+            gender,
+            phone,
+            profile_image_url
+          ),
+          medical_specialties (
+            id,
+            name
+          ),
+          doctor_hospitals (
+            is_primary,
+            hospitals (
+              id,
+              name,
+              city,
+              province
+            )
+          )
+        `
       )
       .order("created_at", { ascending: false });
 
+    // Apply filters
     if (verified === "true") query = query.eq("is_verified", true);
     if (accepting_patients === "true")
       query = query.eq("is_accepting_patients", true);
@@ -45,6 +66,7 @@ export async function GET(request: Request) {
     if (language) query = query.contains("languages_spoken", [language]);
     if (gender) query = query.eq("users.gender", gender);
 
+    // Handle search query
     if (q) {
       const { data: matchingUsers } = await supabase
         .from("users")
@@ -60,12 +82,18 @@ export async function GET(request: Request) {
       }
     }
 
-    if (limit) query = query.limit(Number(limit));
+    // Get total count for pagination
+    const { count: totalCount } = await supabase
+      .from("doctor_profiles")
+      .select("*", { count: "exact", head: true });
 
-    if (offset) {
+    // Apply pagination
+    if (offset && limit) {
       const offsetNum = Number(offset);
-      const limitNum = limit ? Number(limit) : 10;
+      const limitNum = Number(limit);
       query = query.range(offsetNum, offsetNum + limitNum - 1);
+    } else if (limit) {
+      query = query.limit(Number(limit));
     }
 
     const { data, error } = await query;
@@ -81,6 +109,7 @@ export async function GET(request: Request) {
     return NextResponse.json({
       data,
       count: data?.length ?? 0,
+      totalCount: totalCount ?? 0,
       success: true,
     });
   } catch (error) {

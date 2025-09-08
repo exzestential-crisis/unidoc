@@ -7,8 +7,8 @@ import Navbar from "./Navbar";
 export default function ConditionalNavbar() {
   const pathname = usePathname();
 
-  // List of routes where Navbar should NOT be displayed
-  const hideNavbarRoutes = [
+  // Exact routes where Navbar should NOT be displayed
+  const hideExactRoutes = [
     "/signup",
     "/login",
     "/forgot-password",
@@ -19,7 +19,14 @@ export default function ConditionalNavbar() {
     "/contact",
   ];
 
-  if (hideNavbarRoutes.includes(pathname)) return null;
+  // Route prefixes where Navbar should be hidden for ALL nested paths
+  const hideRoutePrefixes = ["/doctor", "/appointments/"];
+
+  const shouldHide =
+    hideExactRoutes.includes(pathname) ||
+    hideRoutePrefixes.some((prefix) => pathname.startsWith(prefix));
+
+  if (shouldHide) return null;
 
   return <Navbar />;
 }

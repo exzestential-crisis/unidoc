@@ -44,7 +44,7 @@ export default function AnimatedButton({
           p-3 gap-4 rounded-full text-xl
           text-white ${textSize} font-medium
 
-          bg-[#009689] /* unidoc-500 */
+          bg-[#00BAB8] /* unidoc-500 */
           shadow-[0_4px_0_#007d70] /* unidoc-600 */
 
           transition

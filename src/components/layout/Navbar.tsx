@@ -32,7 +32,7 @@ export default function Navbar() {
       name: "Doctors",
       icon: FaStethoscope,
       activeIcon: FaStethoscope,
-      link: "/doctors",
+      link: "/search-for-doctors",
     },
     {
       name: "Messages",

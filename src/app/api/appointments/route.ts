@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/utils/supabase/server"; // new client
+import { createClient } from "@/utils/supabase/server";
 
 export async function GET() {
   // Create Supabase client
@@ -29,18 +29,53 @@ export async function GET() {
     );
   }
 
-  // Get all appointments for the patient
+  // Get all appointments for the patient with doctor information
   const { data: appointments, error: appointmentsError } = await supabase
     .from("appointments")
-    .select("*")
-    .eq("patient_id", patient.id);
+    .select(
+      `
+      *,
+      doctor_profiles (
+        id,
+        specialization_id,
+        years_experience,
+        consultation_fee,
+        rating_average,
+        total_reviews,
+        users (
+          first_name,
+          last_name,
+          profile_image_url
+        ),
+        medical_specialties (
+          id,
+          name
+        ),
+        doctor_hospitals (
+          id,
+          is_primary,
+          hospitals (
+            id,
+            name,
+            address
+          )
+        )
+      )
+    `
+    )
+    .eq("patient_id", patient.id)
+    .order("appointment_date", { ascending: false });
 
   if (appointmentsError) {
+    console.error("Supabase error:", appointmentsError.message);
     return NextResponse.json(
-      { error: "Failed to fetch appointments" },
+      {
+        error: "Failed to fetch appointments",
+        details: appointmentsError.message,
+      },
       { status: 500 }
     );
   }
 
-  return NextResponse.json({ data: appointments });
+  return NextResponse.json({ data: appointments || [] });
 }

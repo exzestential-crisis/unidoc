@@ -1,5 +1,6 @@
 "use client";
 
+import { LoadingPage } from "@/components/pages/LoadingPage";
 import { useEffect, useState } from "react";
 import { set } from "zod";
 
@@ -48,7 +49,7 @@ export default function UserHome() {
     fetchProfile();
   }, []);
 
-  if (loading) return <div>Loading your profile...</div>;
+  if (loading) return <LoadingPage message="Loading Your Profile" />;
   if (error) return <div>Error: {error}</div>;
 
   return (

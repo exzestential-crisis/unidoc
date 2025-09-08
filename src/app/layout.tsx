@@ -26,6 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="bg-white text-neutral-800">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <body className="min-h-screen bg-white text-neutral-800">
         <ConditionalNavbar />
         {children}
