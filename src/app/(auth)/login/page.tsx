@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"; // Use this for app router
 import { ArrowBack } from "@/components/nav";
 import Input from "@/components/ui/Input";
 import { FaCheck } from "react-icons/fa";
-import { Apple, Facebook, Google } from "../../../public";
+import { Apple, Facebook, Google } from "../../../../public";
 import Link from "next/link";
 import { login } from "./actions";
 import { AnimatedButton } from "@/components";

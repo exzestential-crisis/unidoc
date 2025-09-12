@@ -6,7 +6,7 @@ import { createClient } from "@/utils/supabase/client";
 import { ArrowBack } from "@/components/nav";
 import Input from "@/components/ui/Input";
 import { FaCheck } from "react-icons/fa";
-import { Apple, Facebook, Google } from "../../../public";
+import { Apple, Facebook, Google } from "../../../../public";
 import Link from "next/link";
 import { AnimatedButton } from "@/components";
 

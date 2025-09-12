@@ -47,9 +47,19 @@ export const DoctorCardSkeleton = () => (
 );
 
 export const HorizontalShowcaseSkeleton = () => (
-  <div className="flex gap-2 overflow-hidden">
-    {[...Array(2)].map((_, i) => (
-      <DoctorCardSkeleton key={i} />
+  <div className="relative w-full flex justify-start gap-4">
+    {[...Array(3)].map((_, i) => (
+      <div
+        key={i}
+        className="flex-shrink-0 w-[220px] h-[290px] animate-pulse"
+        style={{
+          position: "relative",
+          left: i * -40, // negative offset for overlap/overflow effect
+          zIndex: 3 - i, // ensure first card is on top
+        }}
+      >
+        <DoctorCardSkeleton />
+      </div>
     ))}
   </div>
 );

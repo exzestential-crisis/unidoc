@@ -13,12 +13,12 @@ const Header = () => {
           alt="Logo"
           className="h-16 me-4 rounded-full"
         />
-        <h2 className="text-[#525858] font-semibold text-2xl text-start">
+        <h2 className="text-white font-semibold text-2xl text-start">
           Whenever, Wherever
         </h2>
       </div>
       <div className="flex items-center">
-        <FaRegBell className="text-4xl" />
+        <FaRegBell className="text-4xl text-white" />
       </div>
     </Link>
   );
