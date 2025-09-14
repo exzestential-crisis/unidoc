@@ -15,12 +15,11 @@ export const formatDoctorName = (doctor: Doctor): string =>
  */
 export const transformDoctorForCard = (doctor: Doctor) => {
   const primaryHospital: DoctorHospital | undefined =
-    doctor.doctor_hospitals?.find((dh) => dh.is_primary);
+    doctor.doctor_hospitals.find((dh) => dh.is_primary);
 
   const hospitalName =
     primaryHospital?.hospitals?.name ||
-    doctor.doctor_hospitals?.[0]?.hospitals?.name ||
-    null;
+    doctor.doctor_hospitals?.[0]?.hospitals?.name;
 
   return {
     id: doctor.id,
@@ -28,21 +27,17 @@ export const transformDoctorForCard = (doctor: Doctor) => {
     image: doctor.users?.profile_image_url || "http://placehold.co/400x300",
     rating: doctor.rating_average || 0,
     specialty: doctor.medical_specialties?.name || "General",
-    hospital: hospitalName,
+    hospital: hospitalName ?? undefined, // 👈 converts null → undefined
   };
 };
 
-/**
- * Transform Doctor into RowCard-friendly data
- */
 export const transformDoctorForRowCard = (doctor: Doctor) => {
   const primaryHospital: DoctorHospital | undefined =
     doctor.doctor_hospitals?.find((dh) => dh.is_primary);
 
   const hospitalName =
     primaryHospital?.hospitals?.name ||
-    doctor.doctor_hospitals?.[0]?.hospitals?.name ||
-    null;
+    doctor.doctor_hospitals?.[0]?.hospitals?.name;
 
   return {
     id: doctor.id,
@@ -50,7 +45,7 @@ export const transformDoctorForRowCard = (doctor: Doctor) => {
     image: doctor.users?.profile_image_url || "http://placehold.co/400x300",
     rating: doctor.rating_average || 0,
     specialty: doctor.medical_specialties?.name || "General",
-    hospital: hospitalName,
+    hospital: hospitalName ?? undefined, // 👈 normalize here too
     reviews: doctor.total_reviews || 0,
   };
 };
