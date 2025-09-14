@@ -1,3 +1,4 @@
+// Approach 1: Define protected routes explicitly
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -6,6 +7,36 @@ export async function updateSession(request: NextRequest) {
     request,
   });
 
+  const currentPath = request.nextUrl.pathname;
+
+  // Skip auth check for API routes - let them handle their own auth
+  if (currentPath.startsWith("/api/")) {
+    return supabaseResponse;
+  }
+
+  // Define protected routes
+  const protectedRoutes = [
+    "/appointments",
+    "/profile",
+    "/dashboard",
+    "/settings",
+    "/patients",
+    "/medical-records",
+    "/book",
+    // Add more protected routes as needed
+  ];
+
+  // Check if current path needs protection
+  const isProtectedRoute = protectedRoutes.some(
+    (route) => currentPath === route || currentPath.startsWith(route + "/")
+  );
+
+  // If not a protected route, allow access without auth check
+  if (!isProtectedRoute) {
+    return supabaseResponse;
+  }
+
+  // Only create Supabase client for protected routes
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -29,39 +60,17 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // Do not run code between createServerClient and
-  // supabase.auth.getUser(). A simple mistake could make it very hard to debug
-  // issues with users being randomly logged out.
-
-  // IMPORTANT: DO NOT REMOVE auth.getUser()
-
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const publicPaths = ["/", "/login", "/signup", "/auth", "/error"];
-
-  if (
-    !user &&
-    !publicPaths.some((path) => request.nextUrl.pathname.startsWith(path))
-  ) {
+  if (!user) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
+    // Store where they were trying to go
+    url.searchParams.set("redirectTo", currentPath);
     return NextResponse.redirect(url);
   }
-
-  // IMPORTANT: You *must* return the supabaseResponse object as it is.
-  // If you're creating a new response object with NextResponse.next() make sure to:
-  // 1. Pass the request in it, like so:
-  //    const myNewResponse = NextResponse.next({ request })
-  // 2. Copy over the cookies, like so:
-  //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
-  // 3. Change the myNewResponse object to fit your needs, but avoid changing
-  //    the cookies!
-  // 4. Finally:
-  //    return myNewResponse
-  // If this is not done, you may be causing the browser and server to go out
-  // of sync and terminate the user's session prematurely!
 
   return supabaseResponse;
 }

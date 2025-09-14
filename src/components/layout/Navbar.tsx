@@ -52,7 +52,6 @@ export default function Navbar() {
   const activeIndex = tabs.findIndex((tab) => tab.link === pathname);
 
   // Calculate the position of the sliding background
-  // Each tab takes up 1/5 of the width, so we need to position at the center of each tab
   const slidePosition =
     activeIndex !== -1 ? activeIndex * (100 / tabs.length) : 0;
 
@@ -63,20 +62,21 @@ export default function Navbar() {
     max-w-md h-16 
     bg-[#00bab8] z-50 
     rounded-full shadow-lg
-    
     transition-colors duration-300 ease-in-out
     "
     >
       <div className="flex items-center justify-around h-full relative">
-        {/* Sliding background indicator */}
-        <div
-          className="absolute top-1/2 w-12 h-12 bg-white rounded-full transition-all duration-300 ease-out"
-          style={{
-            left: `${slidePosition + 100 / tabs.length / 2}%`,
-            transform: "translateY(-55%) translateX(-50%)",
-            marginTop: "2px", // Slightly lower position
-          }}
-        />
+        {/* ✅ Only show background if there's an active tab */}
+        {activeIndex !== -1 && (
+          <div
+            className="absolute top-1/2 w-12 h-12 bg-white rounded-full transition-all duration-300 ease-out"
+            style={{
+              left: `${slidePosition + 100 / tabs.length / 2}%`,
+              transform: "translateY(-55%) translateX(-50%)",
+              marginTop: "2px",
+            }}
+          />
+        )}
 
         {tabs.map((tab, index) => (
           <NavTab
