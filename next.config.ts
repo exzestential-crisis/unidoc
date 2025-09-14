@@ -1,11 +1,9 @@
-// Method 1: Modify next.config.js to skip type checking
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  // Skip TypeScript type checking during build
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Optional: Also skip ESLint if you want
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -15,3 +13,5 @@ const nextConfig = {
     },
   },
 };
+
+export default nextConfig;
