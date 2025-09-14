@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/utils/supabase/server";
 
-// Optional query: filter slots by date
+// ✅ Define query schema for validation
 const querySchema = z.object({
   date: z.string().optional(),
 });
@@ -13,31 +13,31 @@ export async function GET(
 ) {
   // 1️⃣ Validate doctorId
   const doctorIdSchema = z.string().uuid();
-  const parseResult = doctorIdSchema.safeParse(params.doctorId);
+  const doctorIdResult = doctorIdSchema.safeParse(params.doctorId);
 
-  if (!parseResult.success) {
+  if (!doctorIdResult.success) {
     return NextResponse.json(
       { error: "Invalid doctorId parameter" },
       { status: 400 }
     );
   }
 
-  const doctorId = await params.doctorId;
+  const doctorId = doctorIdResult.data;
 
   // 2️⃣ Parse query params (optional date)
   const url = new URL(request.url);
-  const queryParse = querySchema.safeParse({
+  const queryResult = querySchema.safeParse({
     date: url.searchParams.get("date") || undefined,
   });
 
-  if (!queryParse.success) {
+  if (!queryResult.success) {
     return NextResponse.json(
-      { error: "Invalid query parameters" },
+      { error: "Invalid query parameters", details: queryResult.error.issues },
       { status: 400 }
     );
   }
 
-  const { date } = queryParse.data;
+  const { date } = queryResult.data;
 
   try {
     const supabase = await createClient();
@@ -45,11 +45,19 @@ export async function GET(
     // 3️⃣ Check that the doctor exists
     const { data: doctor, error: doctorError } = await supabase
       .from("doctor_profiles")
-      .select("id, users(first_name,last_name)")
+      .select("id, users(first_name, last_name)")
       .eq("id", doctorId)
       .maybeSingle();
 
-    if (doctorError || !doctor) {
+    if (doctorError) {
+      console.error("Supabase error fetching doctor:", doctorError.message);
+      return NextResponse.json(
+        { error: "Failed to fetch doctor", details: doctorError.message },
+        { status: 500 }
+      );
+    }
+
+    if (!doctor) {
       return NextResponse.json({ error: "Doctor not found" }, { status: 404 });
     }
 
@@ -65,12 +73,15 @@ export async function GET(
       query = query.eq("appointment_date", date);
     }
 
-    const { data: slots, error } = await query;
+    const { data: slots, error: slotsError } = await query;
 
-    if (error) {
-      console.error("Supabase error fetching slots:", error.message);
+    if (slotsError) {
+      console.error("Supabase error fetching slots:", slotsError.message);
       return NextResponse.json(
-        { error: "Failed to fetch appointment slots", details: error.message },
+        {
+          error: "Failed to fetch appointment slots",
+          details: slotsError.message,
+        },
         { status: 500 }
       );
     }
@@ -78,11 +89,11 @@ export async function GET(
     return NextResponse.json({
       doctor: {
         id: doctor.id,
-        name: `${doctor.users?.[0]?.first_name || ""} ${
-          doctor.users?.[0]?.last_name || ""
-        }`,
+        name: `${doctor.users?.[0]?.first_name ?? ""} ${
+          doctor.users?.[0]?.last_name ?? ""
+        }`.trim(),
       },
-      slots: slots || [],
+      slots: slots ?? [],
     });
   } catch (err) {
     console.error("Unexpected error:", err);
