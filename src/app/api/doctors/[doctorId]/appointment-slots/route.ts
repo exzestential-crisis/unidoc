@@ -9,8 +9,10 @@ const querySchema = z.object({
 
 export async function GET(
   request: Request,
-  { params }: { params: { doctorId: string } }
+  context: { params: { doctorId: string } } // ✅ no need to annotate this manually, just use `context`
 ) {
+  const { params } = context;
+
   // 1️⃣ Validate doctorId
   const doctorIdSchema = z.string().uuid();
   const doctorIdResult = doctorIdSchema.safeParse(params.doctorId);
@@ -62,7 +64,7 @@ export async function GET(
     }
 
     // 4️⃣ Fetch available slots for this doctor only
-    let query = supabase
+    let query = (await supabase)
       .from("appointment_slots")
       .select("*")
       .eq("doctor_id", doctorId)
