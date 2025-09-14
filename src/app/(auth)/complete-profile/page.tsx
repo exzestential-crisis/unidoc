@@ -21,7 +21,7 @@ export default function CompleteProfilePage() {
   const [bloodType, setBloodType] = useState("");
   const [allergies, setAllergies] = useState("");
   const [chronic, setChronic] = useState("");
-  const [subscriptionTier, setSubscriptionTier] = useState("free");
+  const [subscriptionTier] = useState("free"); // no set subscription option for now
   const [loading, setLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 

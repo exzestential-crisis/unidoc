@@ -87,7 +87,10 @@ export default function SearchFilterPage() {
     setFilters(initialFilters);
   }, [searchParams]);
 
-  const updateFilter = (key: keyof FilterState, value: any) => {
+  const updateFilter = <K extends keyof FilterState>(
+    key: K,
+    value: FilterState[K]
+  ) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 

@@ -1,5 +1,5 @@
 // utils/doctorUtils.ts
-import { Doctor, DoctorCard, DoctorRowCard } from "@/types/doctor";
+import { Doctor, DoctorHospital } from "@/types/doctor";
 import { specialties as allSpecialties } from "@/constants/specialties";
 
 export const getSpecialtyName = (specializationId: string): string => {
@@ -8,12 +8,15 @@ export const getSpecialtyName = (specializationId: string): string => {
 };
 
 export const formatDoctorName = (doctor: Doctor): string =>
-  `Dr. ${doctor.users.first_name} ${doctor.users.last_name}`;
+  `Dr. ${doctor.users.first_name} ${doctor.users.last_name}`.trim();
 
-export const transformDoctorForCard = (doctor: any) => {
-  const primaryHospital = doctor.doctor_hospitals?.find(
-    (dh: any) => dh.is_primary
-  );
+/**
+ * Transform Doctor into Card-friendly data
+ */
+export const transformDoctorForCard = (doctor: Doctor) => {
+  const primaryHospital: DoctorHospital | undefined =
+    doctor.doctor_hospitals?.find((dh) => dh.is_primary);
+
   const hospitalName =
     primaryHospital?.hospitals?.name ||
     doctor.doctor_hospitals?.[0]?.hospitals?.name ||
@@ -21,9 +24,7 @@ export const transformDoctorForCard = (doctor: any) => {
 
   return {
     id: doctor.id,
-    name: `Dr. ${doctor.users?.first_name || ""} ${
-      doctor.users?.last_name || ""
-    }`.trim(),
+    name: formatDoctorName(doctor),
     image: doctor.users?.profile_image_url || "http://placehold.co/400x300",
     rating: doctor.rating_average || 0,
     specialty: doctor.medical_specialties?.name || "General",
@@ -31,10 +32,13 @@ export const transformDoctorForCard = (doctor: any) => {
   };
 };
 
-export const transformDoctorForRowCard = (doctor: any) => {
-  const primaryHospital = doctor.doctor_hospitals?.find(
-    (dh: any) => dh.is_primary
-  );
+/**
+ * Transform Doctor into RowCard-friendly data
+ */
+export const transformDoctorForRowCard = (doctor: Doctor) => {
+  const primaryHospital: DoctorHospital | undefined =
+    doctor.doctor_hospitals?.find((dh) => dh.is_primary);
+
   const hospitalName =
     primaryHospital?.hospitals?.name ||
     doctor.doctor_hospitals?.[0]?.hospitals?.name ||
@@ -42,9 +46,7 @@ export const transformDoctorForRowCard = (doctor: any) => {
 
   return {
     id: doctor.id,
-    name: `Dr. ${doctor.users?.first_name || ""} ${
-      doctor.users?.last_name || ""
-    }`.trim(),
+    name: formatDoctorName(doctor),
     image: doctor.users?.profile_image_url || "http://placehold.co/400x300",
     rating: doctor.rating_average || 0,
     specialty: doctor.medical_specialties?.name || "General",
@@ -52,6 +54,10 @@ export const transformDoctorForRowCard = (doctor: any) => {
     reviews: doctor.total_reviews || 0,
   };
 };
+
+/**
+ * Categorize doctors into sections
+ */
 export const categorizeDoctors = (doctors: Doctor[]) => {
   const doctorsNearYou = doctors.slice(0, 6);
 

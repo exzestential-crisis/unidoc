@@ -25,6 +25,7 @@ export interface Hospital {
 }
 
 export interface DoctorHospital {
+  id: string;
   is_primary: boolean;
   hospitals: Hospital;
 }
@@ -57,7 +58,9 @@ export interface Doctor {
     id: string;
     name: string;
   };
-  doctor_hospitals?: DoctorHospital[]; // 👈 new relation
+  doctor_hospitals: DoctorHospital[];
+  services?: string[];
+  education?: string | Record<string, unknown>;
 }
 
 // Card views
@@ -80,8 +83,8 @@ export interface DoctorRowCard {
   image: string;
 }
 
-// Search filters interface
-export interface SearchFilters {
+//  filters interface
+export interface DoctorSearchFilters {
   q?: string;
   limit?: number;
   offset?: number;

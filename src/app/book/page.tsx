@@ -62,8 +62,8 @@ export default function BookPage() {
         const json = await res.json();
         setDoctor(json.data?.doctor || null);
         setServices(json.data?.services || []);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err) {
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -92,8 +92,8 @@ export default function BookPage() {
         new Set(availableSlots.map((s) => s.appointment_date))
       );
       setActiveDate(dates[0] || null);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -140,8 +140,8 @@ export default function BookPage() {
         );
 
         window.location.href = "/appointments";
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err) {
+        console.error(err);
       } finally {
         setLoading(false);
       }

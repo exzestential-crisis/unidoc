@@ -141,7 +141,9 @@ export default function LoginPage() {
       </div>
 
       <div className="flex w-full justify-center items-center gap-2">
-        <p className="text-neutral-500 text-center">Don't have an account?</p>
+        <p className="text-neutral-500 text-center">
+          Don&apos;t have an account?
+        </p>
         <Link
           className="text-[#009689] underline font-bold text-lg cursor-pointer"
           href={"/register"}

@@ -2,7 +2,7 @@
 import { ArrowBack } from "@/components/nav";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FaCalendarAlt, FaClock, FaMapMarkerAlt, FaUser } from "react-icons/fa";
+import { FaCalendarAlt, FaClock, FaUser } from "react-icons/fa";
 import { FaCalendarCheck, FaNotesMedical } from "react-icons/fa6";
 import { IoChatboxEllipses } from "react-icons/io5";
 import { MdCancel, MdEdit } from "react-icons/md";
@@ -43,6 +43,7 @@ export default function AppointmentPage() {
         }
       } catch (err) {
         setError("Network error");
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -131,6 +132,7 @@ export default function AppointmentPage() {
       }
     } catch (error) {
       alert("Error cancelling appointment");
+      console.error(error);
     }
   };
 

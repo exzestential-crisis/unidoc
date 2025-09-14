@@ -1,21 +1,33 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+/**
+ * Creates a JSON error response
+ */
 export function createErrorResponse(
   error: string,
   status: number,
-  details?: any
+  details?: Record<string, unknown> | string | z.ZodIssue[]
 ) {
   return NextResponse.json({ error, ...(details && { details }) }, { status });
 }
 
-export function createSuccessResponse(data: any, debug?: any) {
+/**
+ * Creates a JSON success response
+ */
+export function createSuccessResponse<T extends Record<string, unknown>>(
+  data: T,
+  debug?: unknown
+) {
   return NextResponse.json({
     ...data,
-    ...(debug && { debug }),
+    ...(typeof debug === "object" && debug !== null ? { debug } : {}),
   });
 }
 
+/**
+ * Handles errors consistently in API routes
+ */
 export function handleApiError(error: unknown) {
   console.error("API error:", error);
 

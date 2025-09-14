@@ -1,7 +1,7 @@
-import { ApiResponse, SearchFilters } from "@/types/doctor";
+import { ApiResponse, DoctorSearchFilters } from "@/types/doctor";
 
 export const fetchDoctors = async (
-  filters: SearchFilters
+  filters: DoctorSearchFilters
 ): Promise<ApiResponse> => {
   const params = new URLSearchParams();
 

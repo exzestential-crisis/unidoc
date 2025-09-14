@@ -69,6 +69,7 @@ export default function AppointmentsPage() {
         }
       } catch (err) {
         setError("Network error");
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -218,7 +219,7 @@ export default function AppointmentsPage() {
               No Appointments Yet
             </h3>
             <p className="text-gray-500 mb-6">
-              You haven't scheduled any appointments.
+              You haven&apos;t scheduled any appointments.
             </p>
             <button
               onClick={() => router.push("/doctors")}

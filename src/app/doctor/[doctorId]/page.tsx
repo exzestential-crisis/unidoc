@@ -7,13 +7,13 @@ import { FaCalendarCheck, FaStar } from "react-icons/fa";
 import { FaClipboardUser } from "react-icons/fa6";
 import { IoChatboxEllipses } from "react-icons/io5";
 import AnimatedButton from "@/components/ui/AnimatedButton";
-import { LoadingPage } from "@/components/pages/LoadingPage";
 import { DoctorPageSkeleton } from "@/components/skeletons";
+import { Doctor, DoctorHospital } from "@/types/doctor";
 
 export default function DoctorPage() {
   const router = useRouter();
   const { doctorId } = useParams<{ doctorId: string }>();
-  const [doctor, setDoctor] = useState<any>(null);
+  const [doctor, setDoctor] = useState<Doctor | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,6 +33,7 @@ export default function DoctorPage() {
         }
       } catch (err) {
         setError("Network error");
+        console.error("Fetch error:", err);
       } finally {
         setLoading(false);
       }
@@ -99,14 +100,16 @@ export default function DoctorPage() {
 
               <div className="mt-2 text-sm sm:text-base text-neutral-600">
                 <p>
-                  {getSpecialtyName(doctor.specialization_id)} |{" "}
-                  {doctor.doctor_hospitals?.length > 0 ? (
-                    doctor.doctor_hospitals.map((dh: any, idx: number) => (
-                      <span key={dh.id}>
-                        {dh.hospitals?.name}
-                        {idx < doctor.doctor_hospitals.length - 1 && ", "}
-                      </span>
-                    ))
+                  {getSpecialtyName(doctor.specialization_id ?? "")}
+                  {doctor.doctor_hospitals.length > 0 ? (
+                    doctor.doctor_hospitals?.map(
+                      (dh: DoctorHospital, idx: number) => (
+                        <span key={dh.id}>
+                          {dh.hospitals?.name}
+                          {idx < doctor.doctor_hospitals.length - 1 && ", "}
+                        </span>
+                      )
+                    )
                   ) : (
                     <span>No hospitals assigned</span>
                   )}

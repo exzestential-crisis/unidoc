@@ -1,12 +1,5 @@
 "use client";
-import { ArrowBack } from "@/components/nav";
-import {
-  FaCalendarCheck,
-  FaClock,
-  FaUser,
-  FaStethoscope,
-  FaCalendarDays,
-} from "react-icons/fa6";
+import { FaCalendarCheck, FaClock } from "react-icons/fa6";
 import { FaMapMarkedAlt } from "react-icons/fa";
 export default function AppointmentsSkeleton() {
   const skeletonArray = Array(3).fill(0); // 3 skeleton cards

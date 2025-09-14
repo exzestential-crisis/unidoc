@@ -1,6 +1,6 @@
 // components/DoctorSections.tsx
 import React from "react";
-import { Doctor, DoctorCard, DoctorRowCard } from "@/types/doctor";
+import { DoctorCard, DoctorRowCard } from "@/types/doctor";
 import { DoctorRowCard as DoctorRowCardComponent } from "@/components/ui";
 import HorizontalShowcase from "@/components/ui/HorizontalShowcase";
 import {

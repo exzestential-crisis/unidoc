@@ -12,13 +12,10 @@ const textSizeMap: Record<NonNullable<ArrowForwardType["size"]>, string> = {
 };
 
 export default function ArrowForward({ size = "medium" }: ArrowForwardType) {
-  const textSizeMap = {
-    small: "text-sm",
-    medium: "text-xl",
-    large: "text-3xl",
-  };
+  const textSize = textSizeMap[size];
+
   return (
-    <div className={`${size} text-black/30 cursor-pointer`}>
+    <div className={`${textSize} text-black/30 cursor-pointer`}>
       <IoArrowForwardOutline />
     </div>
   );

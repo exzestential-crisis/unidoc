@@ -2,16 +2,27 @@
 import React, { useState } from "react";
 import { specialties } from "@/constants/specialties";
 
+export interface FilterState {
+  verified: boolean;
+  accepting_patients: boolean;
+  specialization_id: string;
+  min_experience: string;
+  max_experience: string;
+  gender: string;
+  language: string;
+  min_rating: string;
+}
+
 interface SearchFiltersProps {
-  onFilterChange: (filters: any) => void;
-  currentFilters: any;
+  onFilterChange: (filters: FilterState) => void;
+  currentFilters: FilterState;
 }
 
 const SearchFilters: React.FC<SearchFiltersProps> = ({
   onFilterChange,
   currentFilters,
 }) => {
-  const [localFilters, setLocalFilters] = useState({
+  const [localFilters, setLocalFilters] = useState<FilterState>({
     verified: currentFilters.verified || false,
     accepting_patients: currentFilters.accepting_patients || false,
     specialization_id: currentFilters.specialization_id || "",
@@ -22,14 +33,17 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
     min_rating: currentFilters.min_rating || "",
   });
 
-  const handleFilterUpdate = (key: string, value: any) => {
-    const newFilters = { ...localFilters, [key]: value };
+  const handleFilterUpdate = <K extends keyof FilterState>(
+    key: K,
+    value: FilterState[K]
+  ) => {
+    const newFilters: FilterState = { ...localFilters, [key]: value };
     setLocalFilters(newFilters);
     onFilterChange(newFilters);
   };
 
   const clearFilters = () => {
-    const clearedFilters = {
+    const clearedFilters: FilterState = {
       verified: false,
       accepting_patients: false,
       specialization_id: "",

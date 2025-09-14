@@ -1,6 +1,6 @@
 // app/search/page.tsx
 "use client";
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { SearchBar } from "@/components/ui";
 import Header from "@/components/ui/Header";
@@ -13,6 +13,7 @@ import {
   transformDoctorForRowCard,
 } from "@/utils/doctorUtils";
 import { specialties as allSpecialties } from "@/constants/specialties";
+import { DoctorSearchFilters } from "@/types/doctor";
 
 function SearchPageContent() {
   const searchParams = useSearchParams();
@@ -46,7 +47,7 @@ function SearchPageContent() {
     handleSearch(query);
   };
 
-  const handleFilterChange = (newFilters: any) => {
+  const handleFilterChange = (newFilters: DoctorSearchFilters) => {
     updateFilters(newFilters);
   };
 
@@ -86,7 +87,7 @@ function SearchPageContent() {
             <h2 className="text-lg sm:text-xl font-semibold text-[#525858] leading-tight">
               Search results{" "}
               {filters.q ? (
-                <>for "{filters.q}"</>
+                <>for &quot;{filters.q}&quot;</>
               ) : filters.specialization_id ? (
                 <>
                   for{" "}

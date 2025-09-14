@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server"; // your new server client
 
-export async function GET(_req: NextRequest) {
+export async function GET() {
   // Create Supabase client using your async createClient()
   const supabase = await createClient();
 

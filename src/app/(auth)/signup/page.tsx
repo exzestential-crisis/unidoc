@@ -18,8 +18,6 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [userType, setUserType] = useState("patient"); // default to patient
-  const [loading, setLoading] = useState(false);
 
   // Individual field errors
   const [fieldErrors, setFieldErrors] = useState({
@@ -93,8 +91,6 @@ export default function RegisterPage() {
 
     if (!validateAllFields()) return;
 
-    setLoading(true);
-
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -147,7 +143,6 @@ export default function RegisterPage() {
         email: "An unexpected error occurred. Please try again.",
       }));
     } finally {
-      setLoading(false);
     }
   }
 
