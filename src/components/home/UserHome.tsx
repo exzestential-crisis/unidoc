@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { SearchBar } from "@/components/ui";
 import Header from "@/components/ui/Header";
-import ErrorState from "@/components/ui/ErrorState";
 import SpecialtySection from "@/components/ui/SpecialtySection";
 import {
   DoctorsNearYouSection,
