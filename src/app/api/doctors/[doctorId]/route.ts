@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 
 export async function GET(
-  req: Request,
-  { params }: { params: { doctorId: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ doctorId: string }> } // ✅ Make params a Promise
 ) {
-  const { doctorId } = await params;
+  const { doctorId } = await params; // ✅ Await the params
   const supabase = await createClient();
 
   // ✅ Validate UUID format
