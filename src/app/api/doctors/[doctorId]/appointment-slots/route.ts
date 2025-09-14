@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/utils/supabase/server";
 
@@ -7,11 +7,17 @@ const querySchema = z.object({
   date: z.string().optional(),
 });
 
+// ✅ Define params type
+interface RouteContext {
+  params: Promise<{ doctorId: string }>; // Changed to Promise in App Router
+}
+
 export async function GET(
-  request: Request,
-  context: { params: { doctorId: string } } // ✅ no need to annotate this manually, just use `context`
+  request: NextRequest, // Use NextRequest instead of Request
+  context: RouteContext
 ) {
-  const { params } = context;
+  // ✅ Await the params promise
+  const params = await context.params;
 
   // 1️⃣ Validate doctorId
   const doctorIdSchema = z.string().uuid();
@@ -64,7 +70,7 @@ export async function GET(
     }
 
     // 4️⃣ Fetch available slots for this doctor only
-    let query = (await supabase)
+    let query = supabase
       .from("appointment_slots")
       .select("*")
       .eq("doctor_id", doctorId)
