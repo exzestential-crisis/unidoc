@@ -28,6 +28,7 @@ export const transformDoctorForCard = (doctor: Doctor) => {
     rating: doctor.rating_average || 0,
     specialty: doctor.medical_specialties?.name || "General",
     hospital: hospitalName ?? undefined, // 👈 converts null → undefined
+    is_verified: doctor.is_verified || false,
   };
 };
 
@@ -47,6 +48,7 @@ export const transformDoctorForRowCard = (doctor: Doctor) => {
     specialty: doctor.medical_specialties?.name || "General",
     hospital: hospitalName ?? undefined, // 👈 normalize here too
     reviews: doctor.total_reviews || 0,
+    is_verified: doctor.is_verified || false,
   };
 };
 

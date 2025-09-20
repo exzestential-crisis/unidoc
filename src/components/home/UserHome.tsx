@@ -10,10 +10,7 @@ import {
   AvailableTodaySection,
 } from "@/components/ui/DoctorSections";
 import { useDoctors } from "@/lib/hooks/use-doctors";
-import {
-  getPrioritizedSpecialties,
-  getDisplayedSpecialties,
-} from "@/utils/specialtyUtils";
+import { specialties } from "@/constants/specialties";
 import {
   transformDoctorForCard,
   transformDoctorForRowCard,
@@ -24,13 +21,6 @@ import {
 export default function Home() {
   const [showAllSpecialties, setShowAllSpecialties] = useState(false);
   const { doctors, loading, error } = useDoctors(); // Removed handleSearch
-
-  // Get and organize specialties
-  const specialties = getPrioritizedSpecialties();
-  const displayedSpecialties = getDisplayedSpecialties(
-    specialties,
-    showAllSpecialties
-  );
 
   // Categorize doctors
   const { doctorsNearYou, topDoctors, availableToday } =
@@ -74,7 +64,7 @@ export default function Home() {
       <div className="rounded-2xl bg-white p-4">
         {/* Specialty Section */}
         <SpecialtySection
-          specialties={displayedSpecialties}
+          specialties={specialties}
           showAllSpecialties={showAllSpecialties}
           onToggleShowAll={handleToggleSpecialties}
         />

@@ -6,6 +6,7 @@ import { specialties as allSpecialties } from "@/constants/specialties";
 import { FaCalendarCheck, FaStar } from "react-icons/fa";
 import { FaClipboardUser } from "react-icons/fa6";
 import { IoChatboxEllipses } from "react-icons/io5";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
 import AnimatedButton from "@/components/ui/AnimatedButton";
 import { DoctorPageSkeleton } from "@/components/skeletons";
 import { Doctor, DoctorHospital } from "@/types/doctor";
@@ -57,6 +58,9 @@ export default function DoctorPage() {
   const handleBookClick = () => {
     router.push(`/book?doctorId=${doctor.id}`);
   };
+
+  // Default to true if is_verified is undefined/null
+  const isVerified = doctor.is_verified ?? true;
 
   return (
     <div className="relative min-h-screen bg-white">
@@ -122,28 +126,24 @@ export default function DoctorPage() {
           <div className="grid grid-cols-4 gap-4 text-neutral-700">
             <div className="flex flex-col items-center space-y-2">
               <div className="relative flex items-center justify-center h-16 w-16 sm:h-20 sm:w-20 rounded-full border-neutral-100 bg-neutral-50">
-                <FaClipboardUser className="text-[#00BAB8] text-3xl sm:text-4xl z-10" />
+                <RiVerifiedBadgeFill className="text-[#00BAB8] text-3xl sm:text-4xl z-10" />
                 <div className="absolute bg-white h-8 w-8 z-0 rounded-2xl" />
               </div>
               <p
                 className={`text-center text-xs sm:text-sm font-semibold
-                  ${
-                    doctor.is_accepting_patients
-                      ? "text-green-500"
-                      : "text-red-600"
-                  }`}
+                  ${isVerified ? "text-green-500" : "text-red-600"}`}
               >
-                {doctor.is_accepting_patients ? (
+                {isVerified ? (
                   <>
-                    Accepting
+                    Verified
                     <br />
-                    Patients
+                    Doctor
                   </>
                 ) : (
                   <>
-                    Not Accepting
+                    Not Verified
                     <br />
-                    Patients
+                    Doctor
                   </>
                 )}
               </p>

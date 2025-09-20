@@ -22,6 +22,11 @@ const SpecialtySection: React.FC<SpecialtySectionProps> = ({
     );
   };
 
+  // Slice the specialties based on showAllSpecialties state
+  const displayedSpecialties = showAllSpecialties 
+    ? specialties 
+    : specialties.slice(0, 6);
+
   return (
     <div className="flex-col">
       <div className="flex justify-between mb-4">
@@ -38,7 +43,7 @@ const SpecialtySection: React.FC<SpecialtySectionProps> = ({
         )}
       </div>
       <div className="grid grid-cols-3 gap-4">
-        {specialties.map((specialty) => (
+        {displayedSpecialties.map((specialty) => (
           <button
             key={specialty.id}
             onClick={() => handleSpecialtyClick(specialty)}

@@ -1,5 +1,6 @@
 import { FaStar } from "react-icons/fa";
 import Link from "next/link";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
 
 interface DoctorRowCardProps {
   id: string;
@@ -9,6 +10,7 @@ interface DoctorRowCardProps {
   rating: number;
   reviews?: number;
   image?: string;
+  is_verified?: boolean; // add is_verified prop
 }
 
 export function DoctorRowCard({
@@ -19,6 +21,7 @@ export function DoctorRowCard({
   rating,
   reviews = 0,
   image = "http://placehold.co/100",
+  is_verified = true, // default to true
 }: DoctorRowCardProps) {
   return (
     <Link href={`/doctor/${id}`} className="block">
@@ -32,9 +35,14 @@ export function DoctorRowCard({
         {/* <-- This div is the flex column next to the image */}
         <div className="flex flex-col justify-between h-full flex-1 min-w-0 py-2">
           <div>
-            <p className="font-semibold text-xl text-neutral-800 truncate">
-              {name}
-            </p>
+            <div className="flex items-center gap-2 mb-1">
+              <p className="font-semibold text-xl text-neutral-800 truncate">
+                {name}
+              </p>
+              {is_verified && (
+                <RiVerifiedBadgeFill className="text-[#00bab8] text-xl flex-shrink-0" />
+              )}
+            </div>
             <p className="font-medium text-neutral-500 truncate">
               {specialty} | {hospital}
             </p>

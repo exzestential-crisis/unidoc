@@ -9,6 +9,7 @@ type Item = {
   specialty: string;
   image: string; // match DoctorCard prop name
   hospital?: string; // pass hospital through
+  is_veified?: boolean; // pass verified through
 };
 
 type HorizontalShowcaseCards = {
@@ -93,6 +94,7 @@ export default function HorizontalShowcase({ items }: HorizontalShowcaseCards) {
               rating={item.rating}
               specialty={item.specialty}
               hospital={item.hospital}
+              is_verified={item.is_veified}
             />
           ))}
 
